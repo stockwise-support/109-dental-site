@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://109dental.ca/sitemap.xml
