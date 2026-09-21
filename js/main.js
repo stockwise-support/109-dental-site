@@ -50,10 +50,18 @@
     });
   });
 
+  function siteBase() {
+    var base = document.querySelector("base[href]");
+    if (base && base.href) {
+      return base.href.endsWith("/") ? base.href : base.href + "/";
+    }
+    return window.location.origin + "/";
+  }
+
   if (form) {
     var nextField = form.querySelector("[name='_next']");
     if (nextField) {
-      nextField.value = window.location.origin + "/thank-you/";
+      nextField.value = siteBase() + "thank-you/";
     }
 
     var pageField = form.querySelector("[name='page']");

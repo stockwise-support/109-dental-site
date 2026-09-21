@@ -1,18 +1,19 @@
 :root {
-  --ink: #14242b;
+  --ink: #102227;
   --ink-soft: #3d4f56;
-  --paper: #f6f3ee;
-  --paper-2: #fffdf9;
+  --paper: #f4f7f6;
+  --paper-2: #ffffff;
   --teal: #1a5c63;
-  --teal-deep: #0e3d43;
+  --teal-deep: #0b3338;
   --teal-mid: #2a7a82;
-  --copper: #b56a3c;
-  --sage: #d8e3df;
-  --line: #d9d2c8;
+  --teal-bright: #3aa8b0;
+  --copper: #c56a32;
+  --sage: #d4ece8;
+  --line: #c9d6d3;
   --white: #ffffff;
   --danger: #8a2b2b;
-  --shadow: 0 16px 40px rgba(20, 36, 43, 0.08);
-  --radius: 18px;
+  --shadow: 0 18px 40px rgba(11, 51, 56, 0.12);
+  --radius: 20px;
   --max: 1120px;
   --header: 84px;
   --font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
@@ -108,12 +109,31 @@ ul:last-child {
 }
 
 .preview-banner {
-  background: #efe4d4;
-  color: var(--ink);
+  background: #f3d9a8;
+  color: #4a3312;
   text-align: center;
   font-size: 0.92rem;
   padding: 0.55rem 1rem;
-  border-bottom: 1px solid #e2d3be;
+  border-bottom: 1px solid #e2c48a;
+}
+
+.topbar {
+  background: var(--teal-deep);
+  color: #d7eee8;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.45rem 0;
+}
+
+.topbar a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .container {
@@ -125,9 +145,10 @@ ul:last-child {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(246, 243, 238, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 3px solid var(--teal);
+  box-shadow: 0 8px 24px rgba(11, 51, 56, 0.06);
 }
 
 .site-header .container {
@@ -287,6 +308,47 @@ ul:last-child {
   padding: 3.4rem 0 2.4rem;
 }
 
+.hero-brand {
+  position: relative;
+  overflow: hidden;
+  padding: 4.2rem 0 3.4rem;
+  color: #f3fbf9;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(58, 168, 176, 0.4), transparent 28%),
+    radial-gradient(circle at 8% 90%, rgba(197, 106, 50, 0.22), transparent 32%),
+    linear-gradient(135deg, #082428 0%, #0e3d43 42%, #1a5c63 100%);
+}
+
+.hero-brand::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -80px auto;
+  width: 280px;
+  height: 280px;
+  border: 28px solid rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-brand h1,
+.hero-brand .lede {
+  color: #fff;
+}
+
+.hero-brand .kicker {
+  color: #9fe0d8;
+}
+
+.hero-brand .btn-secondary {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hero-brand .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
 .hero-grid,
 .split,
 .two-col,
@@ -332,12 +394,20 @@ ul:last-child {
 }
 
 .chip {
-  background: var(--sage);
-  color: var(--teal-deep);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 999px;
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+.section .chip,
+.card .chip {
+  background: var(--sage);
+  color: var(--teal-deep);
+  border-color: transparent;
 }
 
 .panel,
@@ -350,6 +420,15 @@ ul:last-child {
   box-shadow: var(--shadow);
 }
 
+.card {
+  border-top: 5px solid var(--teal);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 40px rgba(11, 51, 56, 0.14);
+}
+
 .panel,
 .card,
 .form-card {
@@ -357,21 +436,22 @@ ul:last-child {
 }
 
 .photo-ph {
-  min-height: 260px;
+  min-height: 280px;
   border-radius: var(--radius);
-  border: 1px dashed #b7c4c1;
+  border: 0;
   background:
-    linear-gradient(180deg, rgba(26, 92, 99, 0.08), rgba(181, 106, 60, 0.08)),
-    repeating-linear-gradient(135deg, #e9efe9 0 12px, #f6f3ee 12px 24px);
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 28%),
+    linear-gradient(160deg, #1a5c63 0%, #0e3d43 55%, #164e56 100%);
   display: grid;
   place-items: end stretch;
   overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
 .photo-ph span {
-  background: rgba(20, 36, 43, 0.78);
+  background: rgba(8, 36, 40, 0.72);
   color: #fff;
-  padding: 0.7rem 1rem;
+  padding: 0.8rem 1rem;
   font-size: 0.92rem;
 }
 
@@ -380,7 +460,7 @@ ul:last-child {
 }
 
 .section-alt {
-  background: #efeae2;
+  background: #e5f0ee;
 }
 
 .section-teal {
@@ -444,6 +524,10 @@ ul:last-child {
 
 .nap p {
   margin: 0 0 0.35rem;
+}
+
+.form-card h2 {
+  color: var(--teal-deep);
 }
 
 .form-card label,
@@ -616,6 +700,12 @@ ul:last-child {
 }
 
 @media (max-width: 900px) {
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
   .hero-grid,
   .cards,
   .two-col,

@@ -3,6 +3,16 @@
 <head>
   <meta charset="utf-8">
   <base href="https://stockwise-support.github.io/109-dental-site/" data-gh-pages-base>
+  <script>
+    (function () {
+      var base = document.querySelector("base[data-gh-pages-base]");
+      if (!base) return;
+      var host = location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {
+        base.href = location.origin + "/";
+      }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Accessibility | 109 Dental Edmonton</title>
   <meta name="description" content="Accessibility notes for the 109 Dental website and Queen Alexandra clinic.">
@@ -13,11 +23,11 @@
   <meta property="og:url" content="https://109dental.ca/accessibility/">
   <meta property="og:locale" content="en_CA">
   <meta name="theme-color" content="#1a5c63">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260921">
   
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "Accessibility", "item": "https://109dental.ca/accessibility/"}]}</script>
 </head>
@@ -25,37 +35,43 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
   <header class="site-header">
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <a href="tel:+17804355300">(780) 435-5300</a>
+      </div>
+    </div>
     <div class="container header-inner">
-      <a class="logo" href="/"><img src="/assets/logo.svg" width="190" height="42" alt="109 Dental, Strathcona Edmonton"></a>
+      <a class="logo" href="./"><img src="assets/logo.svg" width="190" height="42" alt="109 Dental, Strathcona Edmonton"></a>
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about/">About</a></li>
+        <li><a href="./">Home</a></li>
+        <li><a href="about/">About</a></li>
         <li class="has-sub">
-          <a href="/services/">Services</a>
+          <a href="services/">Services</a>
           <div class="submenu">
-            <a href="/services/">All services</a>
-            <a href="/services/family-dentistry/">Family Dentistry</a>
-<a href="/services/childrens-dentistry/">Children's Dentistry</a>
-<a href="/services/emergency-dentist/">Emergency Dentist</a>
-<a href="/services/wisdom-teeth/">Wisdom Teeth</a>
-<a href="/services/dental-implants/">Dental Implants</a>
-<a href="/services/cosmetic-dentistry/">Cosmetic Dentistry</a>
-<a href="/services/orthodontics-invisalign/">Orthodontics & Invisalign</a>
-<a href="/services/root-canals/">Root Canals</a>
-<a href="/services/crowns-bridges/">Crowns & Bridges</a>
+            <a href="services/">All services</a>
+            <a href="services/family-dentistry/">Family Dentistry</a>
+<a href="services/childrens-dentistry/">Children's Dentistry</a>
+<a href="services/emergency-dentist/">Emergency Dentist</a>
+<a href="services/wisdom-teeth/">Wisdom Teeth</a>
+<a href="services/dental-implants/">Dental Implants</a>
+<a href="services/cosmetic-dentistry/">Cosmetic Dentistry</a>
+<a href="services/orthodontics-invisalign/">Orthodontics & Invisalign</a>
+<a href="services/root-canals/">Root Canals</a>
+<a href="services/crowns-bridges/">Crowns & Bridges</a>
           </div>
         </li>
-        <li><a href="/new-patients/">New Patients</a></li>
-        <li><a href="/reviews/">Reviews</a></li>
-        <li><a href="/contact/">Contact</a></li>
+        <li><a href="new-patients/">New Patients</a></li>
+        <li><a href="reviews/">Reviews</a></li>
+        <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
         <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="/contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book</a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -63,7 +79,7 @@
   <main id="main">
     
         <section class="section"><div class="container narrow">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span>Accessibility</span></nav>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>Accessibility</span></nav>
         <h1>Accessibility</h1>
         <p>This website is built in plain HTML with keyboard-visible controls and a skip link. If a page is hard to use, email dental_appointment@shaw.ca and tell us the page URL.</p>
         <p>The clinic is at Suite 204, 7125 109 St NW. Ask us about building access and parking when you book so we can prepare for your visit.</p>
@@ -87,27 +103,27 @@
     <div>
       <div class="footer-title">Visit</div>
       <ul class="footer-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about/">About</a></li>
-        <li><a href="/new-patients/">New patients</a></li>
-        <li><a href="/reviews/">Reviews</a></li>
-        <li><a href="/contact/">Contact</a></li>
-        <li><a href="/privacy/">Privacy</a></li>
-        <li><a href="/accessibility/">Accessibility</a></li>
+        <li><a href="./">Home</a></li>
+        <li><a href="about/">About</a></li>
+        <li><a href="new-patients/">New patients</a></li>
+        <li><a href="reviews/">Reviews</a></li>
+        <li><a href="contact/">Contact</a></li>
+        <li><a href="privacy/">Privacy</a></li>
+        <li><a href="accessibility/">Accessibility</a></li>
       </ul>
     </div>
     <div>
       <div class="footer-title">Services</div>
       <ul class="footer-links">
-        <li><a href="/services/family-dentistry/">Family Dentistry</a></li>
-<li><a href="/services/childrens-dentistry/">Children's Dentistry</a></li>
-<li><a href="/services/emergency-dentist/">Emergency Dentist</a></li>
-<li><a href="/services/wisdom-teeth/">Wisdom Teeth</a></li>
-<li><a href="/services/dental-implants/">Dental Implants</a></li>
-<li><a href="/services/cosmetic-dentistry/">Cosmetic Dentistry</a></li>
-<li><a href="/services/orthodontics-invisalign/">Orthodontics & Invisalign</a></li>
-<li><a href="/services/root-canals/">Root Canals</a></li>
-<li><a href="/services/crowns-bridges/">Crowns & Bridges</a></li>
+        <li><a href="services/family-dentistry/">Family Dentistry</a></li>
+<li><a href="services/childrens-dentistry/">Children's Dentistry</a></li>
+<li><a href="services/emergency-dentist/">Emergency Dentist</a></li>
+<li><a href="services/wisdom-teeth/">Wisdom Teeth</a></li>
+<li><a href="services/dental-implants/">Dental Implants</a></li>
+<li><a href="services/cosmetic-dentistry/">Cosmetic Dentistry</a></li>
+<li><a href="services/orthodontics-invisalign/">Orthodontics & Invisalign</a></li>
+<li><a href="services/root-canals/">Root Canals</a></li>
+<li><a href="services/crowns-bridges/">Crowns & Bridges</a></li>
       </ul>
     </div>
   </div>
@@ -116,9 +132,9 @@
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
   <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="/contact/#book">Book</a>
+  <a class="btn btn-copper" href="contact/#book">Book</a>
 </div>
 
-  <script src="/js/main.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>

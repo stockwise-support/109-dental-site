@@ -12,7 +12,9 @@ From the repo root:
 python3 -m http.server 8080
 ```
 
-Open [http://localhost:8080](http://localhost:8080). Root-relative links (`/contact/`, `/css/styles.css`) need the server started at the repo root, not inside a subfolder.
+Open [http://localhost:8080](http://localhost:8080). The repo also previews on GitHub Pages: [https://stockwise-support.github.io/109-dental-site/](https://stockwise-support.github.io/109-dental-site/).
+
+Asset and nav URLs are **base-relative** (`css/styles.css`, `contact/`), not path-absolute (`/css/styles.css`). Path-absolute URLs ignore `<base>` and 404 on GitHub Pages because the site lives under `/109-dental-site/`.
 
 Optional: `python3 tools/generate.py` rebuilds every HTML page, sitemap, robots, llms.txt, and `.htaccess` from the shared template. Edit `tools/generate.py` if you need a sitewide NAP or nav change, then regenerate. Small copy tweaks can be made directly in the HTML.
 
@@ -72,14 +74,31 @@ Map embed and schema geo use the Edmonton listing at 53.508273, -113.5113761. Do
 5. First FormSubmit send from a new domain needs a one-time email confirm to `dental_appointment@shaw.ca`.
 6. Optional while previewing: add `<meta name="robots" content="noindex, nofollow">` in the shared head (in `tools/generate.py`) if you do not want the temp host indexed. Production `robots.txt` currently allows crawl for 109dental.ca.
 
+## GitHub Pages base tag (remove or rewrite before Hostinger)
+
+Every page has:
+
+```html
+<base href="https://stockwise-support.github.io/109-dental-site/" data-gh-pages-base>
+```
+
+That prefix plus base-relative URLs is what makes CSS, JS, the logo, and in-site links work on the project Pages URL.
+
+Before Hostinger / `109dental.ca` cutover:
+
+1. In `tools/generate.py`, change `GH_PAGES_BASE` to `https://109dental.ca/` or `/`.
+2. Run `python3 tools/generate.py`.
+3. Do **not** delete `<base>` unless you also convert every nested-page link to `../` form. Nested folders (`about/`, `services/wisdom-teeth/`) need either a root `<base>` or `../` paths.
+
 ## DNS cutover to 109dental.ca
 
 1. Remove the preview banner in `tools/generate.py` (the `preview-banner` div) and regenerate, or delete that bar from each HTML file.
-2. Keep canonicals, sitemap, schema, and footer links on `https://109dental.ca` (already set).
-3. At the domain registrar / current host, point 109dental.ca A/CNAME records to Hostinger as Hostinger documents.
-4. Wait for DNS, then test HTTPS, the Edmonton map, mailto, and a form submit.
-5. Request indexing in Google Search Console for the homepage and `/services/wisdom-teeth/`.
-6. Replace photo placeholders with clinic images. Add the real Meta pixel ID on the wisdom teeth page when ads start.
+2. Switch `GH_PAGES_BASE` as above, then regenerate.
+3. Keep canonicals, sitemap, schema, and footer links on `https://109dental.ca` (already set).
+4. At the domain registrar / current host, point 109dental.ca A/CNAME records to Hostinger as Hostinger documents.
+5. Wait for DNS, then test HTTPS, the Edmonton map, mailto, and a form submit.
+6. Request indexing in Google Search Console for the homepage and `/services/wisdom-teeth/`.
+7. Replace photo placeholders with clinic images. Add the real Meta pixel ID on the wisdom teeth page when ads start.
 
 ## Forms
 

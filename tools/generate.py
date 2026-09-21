@@ -2,10 +2,38 @@
 """Generate the static 109 Dental HTML pages. Run from repo root: python3 tools/generate.py"""
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CANON = "https://109dental.ca"
+# Temporary GitHub Pages preview prefix. Path-absolute URLs (/css/...) ignore
+# <base>, so generated href/src values are base-relative (css/styles.css).
+# Before Hostinger / 109dental.ca cutover, change this to "https://109dental.ca/"
+# or "/" and regenerate. Do not delete <base> unless every link is rewritten
+# with ../ from nested folders.
+GH_PAGES_BASE = "https://stockwise-support.github.io/109-dental-site/"
+
+
+def u(path: str) -> str:
+    """Site path as a <base>-relative URL."""
+    if not path or path == "/":
+        return "./"
+    if path.startswith(("#", "tel:", "mailto:", "http://", "https://")):
+        return path
+    return path.lstrip("/")
+
+
+def rebase_html(html: str) -> str:
+    """Convert leftover path-absolute href/src to base-relative URLs."""
+
+    def repl(match: re.Match[str]) -> str:
+        attr, quote, url = match.group(1), match.group(2), match.group(3)
+        if url.startswith("/") and not url.startswith("//"):
+            url = "./" if url == "/" else url.lstrip("/")
+        return f"{attr}={quote}{url}{quote}"
+
+    return re.sub(r"\b(href|src)=([\"'])([^\"']+)\2", repl, html)
 PHONE_DISPLAY = "(780) 435-5300"
 PHONE_TEL = "+17804355300"
 EMAIL = "dental_appointment@shaw.ca"
@@ -55,12 +83,12 @@ def esc(text: str) -> str:
 def nav_html(current: str) -> str:
     def item(href, label, key):
         cur = ' aria-current="page"' if current == key else ""
-        return f'<li><a href="{href}"{cur}>{label}</a></li>'
+        return f'<li><a href="{u(href)}"{cur}>{label}</a></li>'
 
     service_links = []
     for href, label in SERVICES:
         current_attr = ' aria-current="page"' if current == href else ""
-        service_links.append(f'<a href="{href}"{current_attr}>{label}</a>')
+        service_links.append(f'<a href="{u(href)}"{current_attr}>{label}</a>')
     service_links = "\n".join(service_links)
     services_current = ' aria-current="page"' if current.startswith("/services") else ""
     return f"""
@@ -69,9 +97,9 @@ def nav_html(current: str) -> str:
         {item("/", "Home", "/")}
         {item("/about/", "About", "/about/")}
         <li class="has-sub">
-          <a href="/services/"{services_current}>Services</a>
+          <a href="{u('/services/')}"{services_current}>Services</a>
           <div class="submenu">
-            <a href="/services/">All services</a>
+            <a href="{u('/services/')}">All services</a>
             {service_links}
           </div>
         </li>
@@ -84,7 +112,7 @@ def nav_html(current: str) -> str:
 
 
 def footer_html() -> str:
-    service_lis = "\n".join(f'<li><a href="{href}">{label}</a></li>' for href, label in SERVICES)
+    service_lis = "\n".join(f'<li><a href="{u(href)}">{label}</a></li>' for href, label in SERVICES)
     return f"""
 <footer class="site-footer">
   <div class="container footer-grid">
@@ -102,13 +130,13 @@ def footer_html() -> str:
     <div>
       <div class="footer-title">Visit</div>
       <ul class="footer-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about/">About</a></li>
-        <li><a href="/new-patients/">New patients</a></li>
-        <li><a href="/reviews/">Reviews</a></li>
-        <li><a href="/contact/">Contact</a></li>
-        <li><a href="/privacy/">Privacy</a></li>
-        <li><a href="/accessibility/">Accessibility</a></li>
+        <li><a href="{u('/')}">Home</a></li>
+        <li><a href="{u('/about/')}">About</a></li>
+        <li><a href="{u('/new-patients/')}">New patients</a></li>
+        <li><a href="{u('/reviews/')}">Reviews</a></li>
+        <li><a href="{u('/contact/')}">Contact</a></li>
+        <li><a href="{u('/privacy/')}">Privacy</a></li>
+        <li><a href="{u('/accessibility/')}">Accessibility</a></li>
       </ul>
     </div>
     <div>
@@ -126,7 +154,7 @@ def sticky_bar() -> str:
     return f"""
 <div class="sticky-bar" aria-label="Mobile contact actions">
   <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-  <a class="btn btn-copper" href="/contact/#book">Book</a>
+  <a class="btn btn-copper" href="{u('/contact/#book')}">Book</a>
 </div>
 """
 
@@ -203,7 +231,7 @@ def crumbs(items: list[tuple[str, str]]) -> str:
         if i == len(items) - 1:
             bits.append(f"<span>{esc(label)}</span>")
         else:
-            bits.append(f'<a href="{href}">{esc(label)}</a>')
+            bits.append(f'<a href="{u(href)}">{esc(label)}</a>')
     return f'<nav class="crumbs" aria-label="Breadcrumb">{" / ".join(bits)}</nav>'
 
 
@@ -324,6 +352,17 @@ def page(
 <html lang="en-CA">
 <head>
   <meta charset="utf-8">
+  <base href="{GH_PAGES_BASE}" data-gh-pages-base>
+  <script>
+    (function () {{
+      var base = document.querySelector("base[data-gh-pages-base]");
+      if (!base) return;
+      var host = location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {{
+        base.href = location.origin + "/";
+      }}
+    }})();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}">
@@ -334,11 +373,11 @@ def page(
   <meta property="og:url" content="{canonical}">
   <meta property="og:locale" content="en_CA">
   <meta name="theme-color" content="#1a5c63">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="{u('/assets/favicon.svg')}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260921">
   {extra_head}
   {schema_tags}
 </head>
@@ -346,12 +385,18 @@ def page(
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
   <header class="site-header">
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>
+      </div>
+    </div>
     <div class="container header-inner">
-      <a class="logo" href="/"><img src="/assets/logo.svg" width="190" height="42" alt="109 Dental, Strathcona Edmonton"></a>
+      <a class="logo" href="{u('/')}"><img src="{u('/assets/logo.svg')}" width="190" height="42" alt="109 Dental, Strathcona Edmonton"></a>
       {nav_html(current)}
       <div class="header-cta">
         <a class="btn btn-secondary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-        <a class="btn btn-primary" href="/contact/#book">Book</a>
+        <a class="btn btn-primary" href="{u('/contact/#book')}">Book</a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -361,10 +406,11 @@ def page(
   </main>
   {footer_html()}
   {sticky_bar()}
-  <script src="/js/main.js" defer></script>
+  <script src="{u('/js/main.js')}" defer></script>
 </body>
 </html>
 """
+    html = rebase_html(html)
     if path == "/":
         out = ROOT / "index.html"
     elif path.endswith(".html"):
@@ -402,7 +448,7 @@ HOME_FAQS = [
 
 def home():
     body = f"""
-    <section class="hero">
+    <section class="hero hero-brand">
       <div class="container hero-grid">
         <div>
           <p class="kicker">Queen Alexandra / Strathcona</p>
