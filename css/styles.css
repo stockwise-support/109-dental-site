@@ -501,12 +501,27 @@ ul:last-child {
   width: 100%;
   background: none;
   border: 0;
-  padding: 0;
+  padding: 0 1.6rem 0 0;
   font: inherit;
   font-weight: 700;
   text-align: left;
   color: inherit;
   cursor: pointer;
+  appearance: none;
+  position: relative;
+}
+
+.faq button::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.faq button[aria-expanded="true"]::after {
+  content: "\2212";
 }
 
 .faq-panel {
