@@ -7,11 +7,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CANON = "https://109dental.ca"
-# Temporary GitHub Pages preview prefix. Path-absolute URLs (/css/...) ignore
-# <base>, so generated href/src values are base-relative (css/styles.css).
-# Before Hostinger / 109dental.ca cutover, change this to "https://109dental.ca/"
-# or "/" and regenerate. Do not delete <base> unless every link is rewritten
-# with ../ from nested folders.
+# Fallback <base> for GitHub Pages. An inline script then rewrites it:
+# GH Pages (/109-dental-site/) keeps this prefix; Vercel/Hostinger/localhost
+# use the current origin + "/". Do not use path-absolute /css URLs.
 GH_PAGES_BASE = "https://stockwise-support.github.io/109-dental-site/"
 
 
@@ -358,9 +356,16 @@ def page(
       var base = document.querySelector("base[data-gh-pages-base]");
       if (!base) return;
       var host = location.hostname;
+      var path = location.pathname || "/";
       if (host === "localhost" || host === "127.0.0.1") {{
         base.href = location.origin + "/";
+        return;
       }}
+      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {{
+        base.href = location.origin + "/109-dental-site/";
+        return;
+      }}
+      base.href = location.origin + "/";
     }})();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -377,7 +382,7 @@ def page(
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260921">
+  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260922">
   {extra_head}
   {schema_tags}
 </head>

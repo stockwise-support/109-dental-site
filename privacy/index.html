@@ -8,9 +8,16 @@
       var base = document.querySelector("base[data-gh-pages-base]");
       if (!base) return;
       var host = location.hostname;
+      var path = location.pathname || "/";
       if (host === "localhost" || host === "127.0.0.1") {
         base.href = location.origin + "/";
+        return;
       }
+      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {
+        base.href = location.origin + "/109-dental-site/";
+        return;
+      }
+      base.href = location.origin + "/";
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260921">
+  <link rel="stylesheet" href="css/styles.css?v=20260922">
   
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "Privacy", "item": "https://109dental.ca/privacy/"}]}</script>
 </head>

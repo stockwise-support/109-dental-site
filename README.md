@@ -1,8 +1,12 @@
 # 109 Dental website
 
-Static HTML/CSS/JS preview site for **109 Dental** (Edmonton), built for StockWise Marketing so Sandra can review before Hostinger DNS cutover to [109dental.ca](https://109dental.ca).
+Static HTML/CSS/JS clinic site for **109 Dental** (Edmonton). No Next.js. Built so StockWise can share one HTTPS link with Sandra, then cut over to [109dental.ca](https://109dental.ca) on Hostinger later.
 
-Stack matches the StockWise Hostinger pattern: crawlable pages, FormSubmit booking, `sitemap.xml`, `robots.txt`, `llms.txt`, and `.htaccess`. No Next.js, React, or page builder.
+## Share this link (Sandra / StockWise)
+
+**https://stockwise-support.github.io/109-dental-site/**
+
+That is the live GitHub Pages preview. Hard-refresh if a tab still looks unstyled. CSS, JS, and the logo load from `/109-dental-site/…`, not from the github.io domain root.
 
 ## How to preview locally
 
@@ -12,9 +16,15 @@ From the repo root:
 python3 -m http.server 8080
 ```
 
-Open [http://localhost:8080](http://localhost:8080). The repo also previews on GitHub Pages: [https://stockwise-support.github.io/109-dental-site/](https://stockwise-support.github.io/109-dental-site/).
+Open [http://localhost:8080](http://localhost:8080).
 
-Asset and nav URLs are **base-relative** (`css/styles.css`, `contact/`), not path-absolute (`/css/styles.css`). Path-absolute URLs ignore `<base>` and 404 on GitHub Pages because the site lives under `/109-dental-site/`.
+Asset and nav URLs are **base-relative** (`css/styles.css`, `contact/`). An inline script sets `<base>` to:
+
+- `https://stockwise-support.github.io/109-dental-site/` on GitHub Pages
+- `https://<your-host>/` on Vercel, Hostinger, or `109dental.ca`
+- `http://localhost:8080/` on local preview
+
+Do not switch back to path-absolute `/css/styles.css`. Those ignore `<base>` and 404 on project Pages.
 
 Optional: `python3 tools/generate.py` rebuilds every HTML page, sitemap, robots, llms.txt, and `.htaccess` from the shared template. Edit `tools/generate.py` if you need a sitewide NAP or nav change, then regenerate. Small copy tweaks can be made directly in the HTML.
 
@@ -65,35 +75,39 @@ Email: dental_appointment@shaw.ca (no trailing space in mailto)
 
 Map embed and schema geo use the Edmonton listing at 53.508273, -113.5113761. Do not replace this with a generic “109 Dental” search that can resolve out of province.
 
-## Hostinger temp subdomain
+## Vercel one-click (`vercel.json`)
 
-1. In Hostinger File Manager or FTP, upload the repo contents to `public_html` (or the subdomain folder). Keep folder structure: `index.html`, `css/`, `js/`, `assets/`, `about/`, `services/`, `.htaccess`, `sitemap.xml`, `robots.txt`, `llms.txt`.
-2. Point a Hostinger subdomain (example: `preview.109dental.ca` or Hostinger’s default temp URL) at that folder.
-3. Confirm HTTPS works (`.htaccess` already redirects HTTP to HTTPS when Apache + cert are in place).
-4. Open the temp URL and click Call, Book, Contact map, Wisdom Teeth, and the form.
-5. First FormSubmit send from a new domain needs a one-time email confirm to `dental_appointment@shaw.ca`.
-6. Optional while previewing: add `<meta name="robots" content="noindex, nofollow">` in the shared head (in `tools/generate.py`) if you do not want the temp host indexed. Production `robots.txt` currently allows crawl for 109dental.ca.
+Root `vercel.json` is a no-framework static config (`trailingSlash: true`, `cleanUrls: false`). Folder URLs (`/about/`, `/contact/`) and root `404.html` work at domain root.
 
-## GitHub Pages base tag (remove or rewrite before Hostinger)
+1. Import `stockwise-support/109-dental-site` in Vercel (Framework Preset: Other / no framework).
+2. Deploy. The base script switches to `/` on `*.vercel.app` so CSS loads from the Vercel domain, not GitHub Pages.
+3. Share the `*.vercel.app` URL if you want a root preview. GitHub Pages stays the default Sandra link.
 
-Every page has:
+No Vercel token is stored in this repo. If import is not connected yet, keep using the Pages URL above.
 
-```html
-<base href="https://stockwise-support.github.io/109-dental-site/" data-gh-pages-base>
-```
+## Hostinger fallback (Git App cannot see this repo)
 
-That prefix plus base-relative URLs is what makes CSS, JS, the logo, and in-site links work on the project Pages URL.
+Hostinger Git import only lists repos the GitHub App is granted. Vista can show while `109-dental-site` does not. Do not wait on that grant to share a preview.
 
-Before Hostinger / `109dental.ca` cutover:
+**Share now:** use the GitHub Pages link.
 
-1. In `tools/generate.py`, change `GH_PAGES_BASE` to `https://109dental.ca/` or `/`.
-2. Run `python3 tools/generate.py`.
-3. Do **not** delete `<base>` unless you also convert every nested-page link to `../` form. Nested folders (`about/`, `services/wisdom-teeth/`) need either a root `<base>` or `../` paths.
+**When you want Hostinger anyway:**
+
+1. GitHub → org Settings → GitHub Apps → Hostinger → Repository access → add `109-dental-site`, or
+2. Zip the repo and upload to `public_html` (keep `index.html`, `css/`, `js/`, `assets/`, `about/`, `services/`, `.htaccess`, `sitemap.xml`, `robots.txt`, `llms.txt`, `vercel.json`).
+
+On a Hostinger root or temp subdomain the same base script sets `<base>` to that host. First FormSubmit send from a new domain needs a one-time confirm to `dental_appointment@shaw.ca`.
+
+## GitHub Pages `<base>` tag
+
+Every page still has `data-gh-pages-base`. The default `href` is the Pages URL so CSS works even if the rewrite script is blocked. On Vercel or Hostinger the script changes it to `/`.
+
+Optional before `109dental.ca` cutover: set `GH_PAGES_BASE` in `tools/generate.py` to `https://109dental.ca/` or `/` and run `python3 tools/generate.py`. Do **not** delete `<base>` unless every nested link is rewritten with `../`.
 
 ## DNS cutover to 109dental.ca
 
 1. Remove the preview banner in `tools/generate.py` (the `preview-banner` div) and regenerate, or delete that bar from each HTML file.
-2. Switch `GH_PAGES_BASE` as above, then regenerate.
+2. Optional: set `GH_PAGES_BASE` to `https://109dental.ca/` and regenerate. The runtime base script already uses `/` on a root host.
 3. Keep canonicals, sitemap, schema, and footer links on `https://109dental.ca` (already set).
 4. At the domain registrar / current host, point 109dental.ca A/CNAME records to Hostinger as Hostinger documents.
 5. Wait for DNS, then test HTTPS, the Edmonton map, mailto, and a form submit.
