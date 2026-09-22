@@ -2,6 +2,21 @@
 
 Static HTML/CSS/JS clinic site for **109 Dental** (Edmonton). No Next.js. Built so StockWise can share one HTTPS link with Sandra, then cut over to [109dental.ca](https://109dental.ca) on Hostinger later.
 
+## Photos imported from 109dental.ca
+
+Used on Home, About, New Patients, Contact, and service pages (not invented, not stock tiles):
+
+- `assets/photos/exterior.webp` — clinic building with the 109 Dental sign
+- `assets/photos/reception.webp` — front desk and waiting chairs
+- `assets/photos/waiting-room.webp` — waiting area
+- `assets/photos/operatory.webp` — treatment room / hallway
+- `assets/photos/front-desk.webp` — team member at reception
+- `assets/photos/treatment-room.webp` — team member in a treatment room
+- `assets/photos/dr-steve-barkwell.webp` and `dr-guy-girtel.webp` — About portraits
+- `assets/brand-logo.png` and `assets/brand-mark.png` — their wordmark and tooth mark
+
+See `assets/photos/SOURCES.txt`. Generic old-site stock (Shutterstock tiles, posed family/emergency shots) was not reused.
+
 ## Share this link (Sandra / StockWise)
 
 **https://stockwise-support.github.io/109-dental-site/**

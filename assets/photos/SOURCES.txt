@@ -1,0 +1,15 @@
+Clinic-owned images reused from 109dental.ca for the 109 Dental rebuild only.
+
+exterior.webp          109-Dental-Exterior-1-1 (building at 7125 109 St NW)
+reception.webp         109-Dental-4 (front desk and waiting chairs)
+waiting-room.webp      109-Dental-5 (waiting area)
+operatory.webp         109-Dental-2 (treatment room / hallway)
+front-desk.webp        109-Dental-1-1 (team member at reception)
+treatment-room.webp    109-Dental-6 (team member in a treatment room)
+dr-steve-barkwell.webp About page portrait (Untitled-design 2026-03-21)
+dr-guy-girtel.webp     About page portrait (Untitled-design 2025-05-25)
+clinical-team.webp     109-Dental-7-Vertical (clinic-labeled team photo)
+
+Brand marks: /assets/brand-logo.png and /assets/brand-mark.png from 109dental.ca Logo / 109-Tooth.
+
+Skipped generic stock used on the old service tiles (wisdom.jpg, family.jpg, emergg.jpg, shutterstock_*, home1–home4 posed stock).

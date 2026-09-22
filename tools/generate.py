@@ -203,8 +203,14 @@ def booking_form(default_reason: str = "other", heading: str = "Request an appoi
 """
 
 
-def photo(label: str, min_height: str | None = None) -> str:
+def photo(label: str, min_height: str | None = None, src: str | None = None) -> str:
     style = f' style="min-height:{min_height}"' if min_height else ""
+    if src:
+        return (
+            f'<figure class="photo"{style}>'
+            f'<img src="{u(src)}" alt="{esc(label)}" width="900" height="600" loading="lazy">'
+            f"</figure>"
+        )
     return f'<div class="photo-ph"{style}><span>Photo placeholder: {esc(label)}</span></div>'
 
 
@@ -242,7 +248,7 @@ def dentist_schema() -> str:
   "url": "{CANON}/",
   "telephone": "{PHONE_TEL}",
   "email": "{EMAIL}",
-  "image": "{CANON}/assets/logo.svg",
+  "image": "{CANON}/assets/photos/exterior.webp",
   "address": {{
     "@type": "PostalAddress",
     "streetAddress": "{NAP_STREET}",
@@ -382,7 +388,7 @@ def page(
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260922">
+  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260922b">
   {extra_head}
   {schema_tags}
 </head>
@@ -397,7 +403,7 @@ def page(
       </div>
     </div>
     <div class="container header-inner">
-      <a class="logo" href="{u('/')}"><img src="{u('/assets/logo.svg')}" width="190" height="42" alt="109 Dental, Strathcona Edmonton"></a>
+      <a class="logo" href="{u('/')}"><img src="{u('/assets/brand-logo.png')}" width="190" height="72" alt="109 Dental"></a>
       {nav_html(current)}
       <div class="header-cta">
         <a class="btn btn-secondary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
@@ -471,7 +477,7 @@ def home():
             <span class="chip">Transit on 109 Street</span>
           </div>
         </div>
-        {photo("clinic exterior on 109 Street near Whyte Avenue", "320px")}
+        {photo("The 109 Dental clinic at 7125 109 Street NW in Edmonton, with the 109 Dental sign on the building", "320px", "/assets/photos/exterior.webp")}
       </div>
     </section>
     <section class="section section-alt">
@@ -506,7 +512,7 @@ def home():
             <li><a href="/services/">See all services</a></li>
           </ul>
         </div>
-        {photo("treatment room at 109 Dental", "280px")}
+        {photo("A treatment room and hallway inside 109 Dental", "280px", "/assets/photos/operatory.webp")}
       </div>
     </section>
     <section class="section section-teal">
@@ -558,13 +564,13 @@ def about():
     <section class="section section-alt">
       <div class="container two-col">
         <article class="card team-card">
-          {photo("Dr. Steve Barkwell")}
+          {photo("Dr. Steve Barkwell of 109 Dental", src="/assets/photos/dr-steve-barkwell.webp")}
           <h2>Dr. Steve Barkwell</h2>
           <p>Dr. Barkwell was born in Edmonton and completed biochemistry and dentistry degrees at UBC. He has practised in Alberta for more than 11 years.</p>
           <p>He provides a wide range of general care, including implants, Invisalign, children's dentistry, wisdom teeth, and TMJ-related treatment. Bios should be confirmed with the clinic before launch.</p>
         </article>
         <article class="card team-card">
-          {photo("Dr. Guy Girtel")}
+          {photo("Dr. Guy Girtel of 109 Dental", src="/assets/photos/dr-guy-girtel.webp")}
           <h2>Dr. Guy Girtel</h2>
           <p>Dr. Girtel has served Edmonton patients for more than 25 years, with a focus on general and family dentistry. Patients often know him from the long-running practice on 109 Street.</p>
           <p>He is known for a calm, careful approach. Details beyond this public bio should be confirmed with Sandra.</p>
@@ -582,7 +588,7 @@ def about():
             <a class="btn btn-secondary" href="/new-patients/">New patient information</a>
           </div>
         </div>
-        {photo("front desk and waiting area")}
+        {photo("Reception at 109 Dental, with the curved front desk and waiting chairs", src="/assets/photos/reception.webp")}
       </div>
     </section>
     """
@@ -653,9 +659,12 @@ def contact():
       </div>
     </section>
     <section class="section">
-      <div class="container">
-        <h2>Find us in Edmonton</h2>
-        <iframe class="map-frame" title="Google Map of 109 Dental at 7125 109 Street NW, Edmonton" src="{MAP_EMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="container two-col">
+        {photo("The 109 Dental building at 7125 109 Street NW, Edmonton", src="/assets/photos/exterior.webp")}
+        <div>
+          <h2>Find us in Edmonton</h2>
+          <iframe class="map-frame" title="Google Map of 109 Dental at 7125 109 Street NW, Edmonton" src="{MAP_EMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
       </div>
     </section>
     <section class="section">
@@ -705,7 +714,7 @@ def new_patients():
             <a class="btn btn-secondary" href="#book">Request an appointment</a>
           </div>
         </div>
-        {photo("new patient welcome at reception")}
+        {photo("A team member greeting a visitor at the 109 Dental front desk", src="/assets/photos/front-desk.webp")}
       </div>
     </section>
     <section class="section section-alt">
@@ -831,6 +840,8 @@ def service_page(
     extra_head: str = "",
     extra_top: str = "",
     include_map: bool = False,
+    photo_src: str | None = None,
+    photo_alt: str | None = None,
 ):
     url = f"/services/{slug}/"
     related_html = "".join(f'<li><a href="{href}">{label}</a></li>' for href, label in related)
@@ -855,7 +866,7 @@ def service_page(
           <h2>Related care</h2>
           <ul class="list">{related_html}</ul>
         </div>
-        {photo(f"{h1} at 109 Dental")}
+        {photo(photo_alt or f"{h1} at 109 Dental", src=photo_src)}
       </div>
     </section>
     <section class="section" id="book">
@@ -955,6 +966,8 @@ def wisdom():
         extra_head=extra,
         extra_top=extra_top,
         include_map=True,
+        photo_src="/assets/photos/operatory.webp",
+        photo_alt="A treatment room at 109 Dental, where wisdom teeth are assessed",
     )
 
 
@@ -976,6 +989,8 @@ def remaining_services():
             ("Do you offer regular cleanings?", "Yes. Hygiene visits are a core part of family dentistry. Frequency depends on your gums and history."),
         ],
         [("/services/childrens-dentistry/", "Children's dentistry"), ("/new-patients/", "New patients")],
+        photo_src="/assets/photos/waiting-room.webp",
+        photo_alt="The waiting room at 109 Dental in Queen Alexandra",
     )
     service_page(
         "emergency-dentist",
@@ -1001,6 +1016,8 @@ def remaining_services():
         ],
         [("/services/wisdom-teeth/", "Wisdom teeth"), ("/contact/", "Contact")],
         include_map=True,
+        photo_src="/assets/photos/reception.webp",
+        photo_alt="The 109 Dental reception desk, where emergency patients check in",
     )
     service_page(
         "cosmetic-dentistry",
@@ -1011,7 +1028,7 @@ def remaining_services():
         """
         <h2>What we can talk through</h2>
         <p>Whitening, bonding, and veneers are the usual cosmetic requests. Some smiles need a crown or orthodontics first. We will say so instead of selling a treatment that will not last.</p>
-        <p>Results vary. Photos on this site are placeholders until the clinic supplies real cases.</p>
+        <p>Results vary. We will not publish before-and-after cases unless the clinic approves them.</p>
         """,
         "other",
         [
@@ -1019,6 +1036,8 @@ def remaining_services():
             ("Do you offer veneers?", "Veneers can be discussed when they are a fit. They are not the first answer for every chip or colour concern."),
         ],
         [("/services/orthodontics-invisalign/", "Invisalign"), ("/services/crowns-bridges/", "Crowns and bridges")],
+        photo_src="/assets/photos/treatment-room.webp",
+        photo_alt="A 109 Dental team member in a treatment room discussing smile options",
     )
     service_page(
         "dental-implants",
@@ -1037,6 +1056,8 @@ def remaining_services():
             ("Will insurance or CDCP help?", "Sometimes. Implant benefits vary widely. Bring your plan details to the consult."),
         ],
         [("/services/crowns-bridges/", "Crowns and bridges"), ("/services/family-dentistry/", "Family dentistry")],
+        photo_src="/assets/photos/operatory.webp",
+        photo_alt="A treatment room at 109 Dental used for implant consults",
     )
     service_page(
         "orthodontics-invisalign",
@@ -1055,6 +1076,8 @@ def remaining_services():
             ("Do you also treat kids who may need braces?", "We watch growth and crowding in children and discuss timing. See our children's dentistry page for younger visits."),
         ],
         [("/services/childrens-dentistry/", "Children's dentistry"), ("/services/cosmetic-dentistry/", "Cosmetic dentistry")],
+        photo_src="/assets/photos/treatment-room.webp",
+        photo_alt="A 109 Dental team member in a treatment room with a smile example on the monitor",
     )
     service_page(
         "childrens-dentistry",
@@ -1073,6 +1096,8 @@ def remaining_services():
             ("Do you accept CDCP for kids?", "Yes, when the child is covered. Bring CDCP details to the visit."),
         ],
         [("/services/family-dentistry/", "Family dentistry"), ("/services/emergency-dentist/", "Emergency dentist")],
+        photo_src="/assets/photos/waiting-room.webp",
+        photo_alt="The 109 Dental waiting room for family and children's visits",
     )
     service_page(
         "root-canals",
@@ -1090,6 +1115,8 @@ def remaining_services():
             ("Can this wait if I am in pain?", "Call us. Waiting with an infection can make the visit harder. Use the emergency page if you need same-day advice."),
         ],
         [("/services/emergency-dentist/", "Emergency dentist"), ("/services/crowns-bridges/", "Crowns and bridges")],
+        photo_src="/assets/photos/operatory.webp",
+        photo_alt="A treatment room at 109 Dental",
     )
     service_page(
         "crowns-bridges",
@@ -1107,6 +1134,8 @@ def remaining_services():
             ("Is a bridge better than an implant?", "It depends on the bone, the neighbouring teeth, and your budget. That is a consult question, not a slogan."),
         ],
         [("/services/dental-implants/", "Dental implants"), ("/services/family-dentistry/", "Family dentistry")],
+        photo_src="/assets/photos/reception.webp",
+        photo_alt="Reception at 109 Dental",
     )
 
 
