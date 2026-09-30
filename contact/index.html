@@ -17,28 +17,35 @@
         base.href = location.origin + "/109-dental-site/";
         return;
       }
+      if (host === "raw.githack.com" || host === "rawcdn.githack.com") {
+        base.href = location.origin + path.split("/").slice(0, 4).join("/") + "/";
+        return;
+      }
       base.href = location.origin + "/";
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact 109 Dental | Strathcona / Queen Alexandra</title>
   <meta name="description" content="Call (780) 435-5300 or book at Suite 204, 7125 109 St NW, Edmonton. Map, hours, parking, and transit for our Strathcona clinic.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://109dental.ca/contact/">
   <meta property="og:title" content="Contact 109 Dental | Strathcona / Queen Alexandra">
   <meta property="og:description" content="Call (780) 435-5300 or book at Suite 204, 7125 109 St NW, Edmonton. Map, hours, parking, and transit for our Strathcona clinic.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/contact/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930">
   
   <script type="application/ld+json">{
   "@context": "https://schema.org",
-  "@type": ["Dentist", "DentalClinic"],
+  "@type": "Dentist",
+  "@id": "https://109dental.ca/#clinic",
   "name": "109 Dental",
   "url": "https://109dental.ca/",
   "telephone": "+17804355300",
@@ -59,24 +66,22 @@
   },
   "openingHoursSpecification": [
     {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday"],"opens":"08:30","closes":"16:30"},
-    {"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"},
-    {"@type":"OpeningHoursSpecification","dayOfWeek":["Friday"],"opens":"09:00","closes":"15:00"}
+    {"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"}
   ],
   "sameAs": ["https://www.facebook.com/109Dental", "https://www.instagram.com/109Dental", "https://www.google.com/maps/place/109+Dental/@53.508273,-113.5113761,15z/data=!4m6!3m5!1s0x53a021ff735aaf45:0x2c79bd58134a09ae!8m2!3d53.508273!4d-113.5113761"],
   "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Whyte Avenue", "Edmonton"],
-  "isAcceptingNewPatients": true,
-  "priceRange": "$$"
+  "isAcceptingNewPatients": true
 }</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Where is 109 Dental?", "acceptedAnswer": {"@type": "Answer", "text": "Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9, in Queen Alexandra / Strathcona near the University of Alberta and Whyte Avenue."}}, {"@type": "Question", "name": "What are your hours?", "acceptedAnswer": {"@type": "Answer", "text": "Monday and Tuesday 8:30 AM to 4:30 PM. Wednesday and Thursday 7:30 AM to 3:30 PM. Friday 9:00 AM to 3:00 PM. Saturday and Sunday closed. Please confirm Friday hours when you book. Public listings have not always matched."}}, {"@type": "Question", "name": "How do I book?", "acceptedAnswer": {"@type": "Answer", "text": "Call (780) 435-5300 or send the short form on this page. We respond during business hours."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Where is 109 Dental?", "acceptedAnswer": {"@type": "Answer", "text": "Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9, in Queen Alexandra / Strathcona near the University of Alberta and Whyte Avenue."}}, {"@type": "Question", "name": "What are your hours?", "acceptedAnswer": {"@type": "Answer", "text": "Monday and Tuesday 8:30 AM to 4:30 PM. Wednesday and Thursday 7:30 AM to 3:30 PM. Friday 9:00 AM to 3:00 PM. Saturday and Sunday closed. Please confirm Friday hours when you book."}}, {"@type": "Question", "name": "How do I book?", "acceptedAnswer": {"@type": "Answer", "text": "Call (780) 435-5300 or send the short form on this page. We respond during business hours."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "Contact", "item": "https://109dental.ca/contact/"}]}</script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="contact/#main">Skip to content</a>
+  <div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -85,7 +90,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li class="has-sub">
           <a href="services/">Services</a>
@@ -103,14 +107,12 @@
           </div>
         </li>
         <li><a href="new-patients/">New Patients</a></li>
-        <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/" aria-current="page">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -122,7 +124,7 @@
         <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>Contact</span></nav>
         <p class="kicker">Edmonton clinic</p>
         <h1>Contact 109 Dental in Strathcona</h1>
-        <p class="lede">109 Dental is a family dental clinic in Suite 204 at 7125 109 Street NW in Edmonton's Queen Alexandra / Strathcona area, near the University of Alberta. Call, email, or send a short appointment request. This map is Edmonton only.</p>
+        <p class="lede">Call, email, or send an appointment request. Find us at Suite 204, 7125 109 Street NW in Edmonton, near Strathcona and the University of Alberta.</p>
       </div>
     </section>
     <section class="section section-alt">
@@ -142,7 +144,7 @@
             <div>Friday</div><div>9:00 AM to 3:00 PM</div>
             <div>Saturday and Sunday</div><div>Closed</div>
           </div>
-          <p class="form-note">Friday hours have appeared as 8:00 or 9:00 on different listings. Confirm with the office when you book.</p>
+          <p class="form-note">Please call to confirm Friday hours before your visit.</p>
           <h3>Parking and transit</h3>
           <p>Free patient parking at the building. Transit runs along 109 Street. We are near Whyte Avenue and a short trip from the University of Alberta.</p>
           <div class="cta-row">
@@ -154,7 +156,7 @@
           
 <form class="form-card" data-booking-form action="https://formsubmit.co/dental_appointment@shaw.ca" method="POST">
   <h2>Request an appointment</h2>
-  <p class="form-note">Short request only. We reply during business hours. For pain or swelling, call (780) 435-5300 first.</p>
+  <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:+17804355300">(780) 435-5300</a>.</p>
   <input type="hidden" name="_subject" value="109 Dental appointment request">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_captcha" value="false">
@@ -165,8 +167,8 @@
   <input type="hidden" name="utm_campaign" value="">
   <input type="hidden" name="utm_content" value="">
   <input type="hidden" name="utm_term" value="">
-  <label class="hp" for="website">Website</label>
-  <input class="hp" id="website" type="text" name="_honey" tabindex="-1" autocomplete="off">
+  <div class="hp" aria-hidden="true"><label for="website">Website</label>
+  <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
   <label for="name">Name</label>
   <input id="name" name="name" type="text" required autocomplete="name">
   <label for="phone">Phone</label>
@@ -184,6 +186,7 @@
   </select>
   <label for="notes">Notes (optional)</label>
   <textarea id="notes" name="notes"></textarea>
+  <p class="form-note">Please keep notes to scheduling details. Do not include medical records or health card numbers. Requests are sent through FormSubmit. <a href="privacy/">Privacy information</a></p>
   <button class="btn btn-primary" type="submit">Send request</button>
 </form>
 
@@ -192,7 +195,7 @@
     </section>
     <section class="section">
       <div class="container two-col">
-        <figure class="photo"><img src="assets/photos/exterior.webp" alt="The 109 Dental building at 7125 109 Street NW, Edmonton" width="900" height="600" loading="lazy"></figure>
+        <figure class="photo"><img src="assets/photos/exterior.webp" alt="The 109 Dental building at 7125 109 Street NW, Edmonton" width="768" height="512" loading="lazy"  decoding="async"></figure>
         <div>
           <h2>Find us in Edmonton</h2>
           <iframe class="map-frame" title="Google Map of 109 Dental at 7125 109 Street NW, Edmonton" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2372.7717299152596!2d-113.51137609999999!3d53.508272999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53a021ff735aaf45%3A0x2c79bd58134a09ae!2s109%20Dental%20%7C%20South%20Edmonton%20Dentist!5e0!3m2!1sen!2sca" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -205,20 +208,20 @@
         <div class="faq">
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-1">Where is 109 Dental?</button>
-              <div class="faq-panel" id="faq-1" hidden><p>Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9, in Queen Alexandra / Strathcona near the University of Alberta and Whyte Avenue.</p></div>
+              <details><summary>Where is 109 Dental?</summary>
+              <div class="faq-panel"><p>Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9, in Queen Alexandra / Strathcona near the University of Alberta and Whyte Avenue.</p></div></details>
             </div>
             
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-2">What are your hours?</button>
-              <div class="faq-panel" id="faq-2" hidden><p>Monday and Tuesday 8:30 AM to 4:30 PM. Wednesday and Thursday 7:30 AM to 3:30 PM. Friday 9:00 AM to 3:00 PM. Saturday and Sunday closed. Please confirm Friday hours when you book. Public listings have not always matched.</p></div>
+              <details><summary>What are your hours?</summary>
+              <div class="faq-panel"><p>Monday and Tuesday 8:30 AM to 4:30 PM. Wednesday and Thursday 7:30 AM to 3:30 PM. Friday 9:00 AM to 3:00 PM. Saturday and Sunday closed. Please confirm Friday hours when you book.</p></div></details>
             </div>
             
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-3">How do I book?</button>
-              <div class="faq-panel" id="faq-3" hidden><p>Call (780) 435-5300 or send the short form on this page. We respond during business hours.</p></div>
+              <details><summary>How do I book?</summary>
+              <div class="faq-panel"><p>Call (780) 435-5300 or send the short form on this page. We respond during business hours.</p></div></details>
             </div>
             
 </div>
@@ -230,7 +233,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -267,12 +270,13 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
   <script src="js/main.js" defer></script>

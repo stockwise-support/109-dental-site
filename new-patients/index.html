@@ -17,35 +17,41 @@
         base.href = location.origin + "/109-dental-site/";
         return;
       }
+      if (host === "raw.githack.com" || host === "rawcdn.githack.com") {
+        base.href = location.origin + path.split("/").slice(0, 4).join("/") + "/";
+        return;
+      }
       base.href = location.origin + "/";
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>New Patients in Strathcona Near U of A | 109 Dental</title>
   <meta name="description" content="New patients are welcome at 109 Dental in Queen Alexandra. Learn what to bring, CDCP and insurance notes, parking, and how to book.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://109dental.ca/new-patients/">
   <meta property="og:title" content="New Patients in Strathcona Near U of A | 109 Dental">
   <meta property="og:description" content="New patients are welcome at 109 Dental in Queen Alexandra. Learn what to bring, CDCP and insurance notes, parking, and how to book.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/new-patients/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930">
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What should I bring to my first appointment?", "acceptedAnswer": {"@type": "Answer", "text": "Bring government photo ID, dental insurance or CDCP information, a list of medications, and any recent dental records if you have them."}}, {"@type": "Question", "name": "Do you accept CDCP?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We accept the Canadian Dental Care Plan. We will help you use your coverage and explain any portion that may not be covered."}}, {"@type": "Question", "name": "Do you take new patients who live near campus?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many patients come from the University of Alberta, Garneau, Queen Alexandra, and Whyte Avenue. Free parking is available."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What should I bring to my first appointment?", "acceptedAnswer": {"@type": "Answer", "text": "Bring government photo ID, dental insurance or CDCP information, a list of medications, and any recent dental records if you have them."}}, {"@type": "Question", "name": "Do you accept CDCP?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We accept the Canadian Dental Care Plan. We will help you use your coverage and explain any portion that may not be covered."}}, {"@type": "Question", "name": "Do you take new patients who live near campus?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Our clinic is near the University of Alberta, with free parking at the building."}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "New patients", "item": "https://109dental.ca/new-patients/"}]}</script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="new-patients/#main">Skip to content</a>
+  <div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -54,7 +60,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li class="has-sub">
           <a href="services/">Services</a>
@@ -72,14 +77,12 @@
           </div>
         </li>
         <li><a href="new-patients/" aria-current="page">New Patients</a></li>
-        <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -91,14 +94,14 @@
         <div>
           <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>New patients</span></nav>
           <p class="kicker">First visit</p>
-          <h1>New patients in Strathcona and near U of A</h1>
-          <p class="lede">109 Dental is a family dental clinic in Suite 204 at 7125 109 Street NW in Edmonton's Queen Alexandra / Strathcona area, near the University of Alberta. If you need a new family dentist, start with a phone call or the form on this page.</p>
+          <h1>Your first visit to 109 Dental</h1>
+          <p class="lede">109 Dental is a family dental clinic in Suite 204 at 7125 109 Street NW in Edmonton's Queen Alexandra neighbourhood, near Strathcona and the University of Alberta. If you need a new family dentist, start with a phone call or the form on this page.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-            <a class="btn btn-secondary" href="#book">Request an appointment</a>
+            <a class="btn btn-secondary" href="new-patients/#book">Request an appointment</a>
           </div>
         </div>
-        <figure class="photo"><img src="assets/photos/front-desk.webp" alt="A team member greeting a visitor at the 109 Dental front desk" width="900" height="600" loading="lazy"></figure>
+        <figure class="photo"><img src="assets/photos/front-desk.webp" alt="A team member at the 109 Dental front desk" width="768" height="512" loading="lazy"  decoding="async"></figure>
       </div>
     </section>
     <section class="section section-alt">
@@ -132,7 +135,7 @@
         
 <form class="form-card" data-booking-form action="https://formsubmit.co/dental_appointment@shaw.ca" method="POST">
   <h2>Book as a new patient</h2>
-  <p class="form-note">Short request only. We reply during business hours. For pain or swelling, call (780) 435-5300 first.</p>
+  <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:+17804355300">(780) 435-5300</a>.</p>
   <input type="hidden" name="_subject" value="109 Dental appointment request">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_captcha" value="false">
@@ -143,8 +146,8 @@
   <input type="hidden" name="utm_campaign" value="">
   <input type="hidden" name="utm_content" value="">
   <input type="hidden" name="utm_term" value="">
-  <label class="hp" for="website">Website</label>
-  <input class="hp" id="website" type="text" name="_honey" tabindex="-1" autocomplete="off">
+  <div class="hp" aria-hidden="true"><label for="website">Website</label>
+  <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
   <label for="name">Name</label>
   <input id="name" name="name" type="text" required autocomplete="name">
   <label for="phone">Phone</label>
@@ -162,6 +165,7 @@
   </select>
   <label for="notes">Notes (optional)</label>
   <textarea id="notes" name="notes"></textarea>
+  <p class="form-note">Please keep notes to scheduling details. Do not include medical records or health card numbers. Requests are sent through FormSubmit. <a href="privacy/">Privacy information</a></p>
   <button class="btn btn-primary" type="submit">Send request</button>
 </form>
 
@@ -170,20 +174,20 @@
           <div class="faq">
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-1">What should I bring to my first appointment?</button>
-              <div class="faq-panel" id="faq-1" hidden><p>Bring government photo ID, dental insurance or CDCP information, a list of medications, and any recent dental records if you have them.</p></div>
+              <details><summary>What should I bring to my first appointment?</summary>
+              <div class="faq-panel"><p>Bring government photo ID, dental insurance or CDCP information, a list of medications, and any recent dental records if you have them.</p></div></details>
             </div>
             
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-2">Do you accept CDCP?</button>
-              <div class="faq-panel" id="faq-2" hidden><p>Yes. We accept the Canadian Dental Care Plan. We will help you use your coverage and explain any portion that may not be covered.</p></div>
+              <details><summary>Do you accept CDCP?</summary>
+              <div class="faq-panel"><p>Yes. We accept the Canadian Dental Care Plan. We will help you use your coverage and explain any portion that may not be covered.</p></div></details>
             </div>
             
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-3">Do you take new patients who live near campus?</button>
-              <div class="faq-panel" id="faq-3" hidden><p>Yes. Many patients come from the University of Alberta, Garneau, Queen Alexandra, and Whyte Avenue. Free parking is available.</p></div>
+              <details><summary>Do you take new patients who live near campus?</summary>
+              <div class="faq-panel"><p>Yes. Our clinic is near the University of Alberta, with free parking at the building.</p></div></details>
             </div>
             
 </div>
@@ -196,7 +200,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -233,12 +237,13 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
   <script src="js/main.js" defer></script>

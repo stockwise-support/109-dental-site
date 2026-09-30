@@ -17,34 +17,40 @@
         base.href = location.origin + "/109-dental-site/";
         return;
       }
+      if (host === "raw.githack.com" || host === "rawcdn.githack.com") {
+        base.href = location.origin + path.split("/").slice(0, 4).join("/") + "/";
+        return;
+      }
       base.href = location.origin + "/";
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Patient Reviews | 109 Dental Strathcona Edmonton</title>
-  <meta name="description" content="Find 109 Dental reviews for our Queen Alexandra / Strathcona clinic. We link to Google and only publish quotes the office approves.">
+  <title>Patient Reviews | 109 Dental Edmonton</title>
+  <meta name="description" content="Read patient reviews on the 109 Dental Google listing or call our Edmonton clinic with questions about your visit.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://109dental.ca/reviews/">
-  <meta property="og:title" content="Patient Reviews | 109 Dental Strathcona Edmonton">
-  <meta property="og:description" content="Find 109 Dental reviews for our Queen Alexandra / Strathcona clinic. We link to Google and only publish quotes the office approves.">
+  <meta property="og:title" content="Patient Reviews | 109 Dental Edmonton">
+  <meta property="og:description" content="Read patient reviews on the 109 Dental Google listing or call our Edmonton clinic with questions about your visit.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/reviews/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930">
   
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "Reviews", "item": "https://109dental.ca/reviews/"}]}</script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="reviews/#main">Skip to content</a>
+  <div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -53,7 +59,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li class="has-sub">
           <a href="services/">Services</a>
@@ -71,48 +76,32 @@
           </div>
         </li>
         <li><a href="new-patients/">New Patients</a></li>
-        <li><a href="reviews/" aria-current="page">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
   </header>
   <main id="main">
     
-    <section class="section">
-      <div class="container narrow">
-        <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>Reviews</span></nav>
-        <p class="kicker">Social proof</p>
-        <h1>Reviews for 109 Dental</h1>
-        <p class="lede">We do not invent testimonials. When Sandra shares approved comments, they will appear here with a clear source. Until then, the honest path is Google and a conversation with the office.</p>
-        <div class="panel">
-          <h2>Read or leave a Google review</h2>
-          <p>Search Google for 109 Dental at Suite 204, 7125 109 St NW, Edmonton. Use the clinic listing that shows this address, not an out-of-province result.</p>
-          <div class="cta-row">
-            <a class="btn btn-primary" href="https://www.google.com/maps/place/109+Dental/@53.508273,-113.5113761,15z/data=!4m6!3m5!1s0x53a021ff735aaf45:0x2c79bd58134a09ae!8m2!3d53.508273!4d-113.5113761">Open our Edmonton Google listing</a>
-            <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-          </div>
-        </div>
-        <div class="notice" style="margin-top:1.2rem">
-          Placeholder for approved patient comments. Do not publish names or quotes until the clinic confirms them.
-        </div>
-        <h2>What patients often mention</h2>
-        <p>People usually want to know that we are the same 109 Street practice, that new patients can join, and that parking is straightforward. If you have a visit coming up, <a href="new-patients/">see what to bring</a> or <a href="contact/">book from the contact page</a>.</p>
-      </div>
-    </section>
+    <section class="section"><div class="container hero-grid"><div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>Reviews</span></nav>
+      <p class="kicker">From our patients</p><h1>Read about their visits.</h1>
+      <p class="lede">You can find patient reviews on our Google listing. If you have a question about your own visit, please call the clinic.</p>
+      <div class="cta-row"><a class="btn btn-primary" href="https://www.google.com/maps/place/109+Dental/@53.508273,-113.5113761,15z/data=!4m6!3m5!1s0x53a021ff735aaf45:0x2c79bd58134a09ae!8m2!3d53.508273!4d-113.5113761">Visit our Google listing ↗</a><a class="text-link" href="tel:+17804355300">(780) 435-5300</a></div>
+      <p class="review-note">Looking for a new dentist? <a href="new-patients/">Here's what to bring to your first visit.</a></p>
+    </div><figure class="photo"><img src="assets/photos/reception.webp" alt="The reception area at 109 Dental" width="1400" height="934" loading="eager" fetchpriority=high decoding="async"></figure></div></section>
     
   </main>
   
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -149,12 +138,13 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
   <script src="js/main.js" defer></script>

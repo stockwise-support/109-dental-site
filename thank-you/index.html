@@ -17,34 +17,40 @@
         base.href = location.origin + "/109-dental-site/";
         return;
       }
+      if (host === "raw.githack.com" || host === "rawcdn.githack.com") {
+        base.href = location.origin + path.split("/").slice(0, 4).join("/") + "/";
+        return;
+      }
       base.href = location.origin + "/";
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Request Received | 109 Dental</title>
-  <meta name="description" content="Your appointment request was sent to 109 Dental. We reply during business hours.">
+  <meta name="description" content="Thank you for contacting 109 Dental. Our team will confirm your appointment during office hours.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://109dental.ca/thank-you/">
   <meta property="og:title" content="Request Received | 109 Dental">
-  <meta property="og:description" content="Your appointment request was sent to 109 Dental. We reply during business hours.">
+  <meta property="og:description" content="Thank you for contacting 109 Dental. Our team will confirm your appointment during office hours.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/thank-you/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930">
   
   
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="thank-you/#main">Skip to content</a>
+  <div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -53,7 +59,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li class="has-sub">
           <a href="services/">Services</a>
@@ -71,14 +76,12 @@
           </div>
         </li>
         <li><a href="new-patients/">New Patients</a></li>
-        <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -86,7 +89,7 @@
   <main id="main">
     
         <section class="section"><div class="container narrow">
-        <h1>We received your request</h1>
+        <h1>Thank you for getting in touch.</h1>
         <p>The office reviews messages during open hours. If you are in pain, call <a href="tel:+17804355300">(780) 435-5300</a> instead of waiting on email.</p>
         <p><a href="./">Back to the homepage</a></p>
         </div></section>
@@ -96,7 +99,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -133,12 +136,13 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
   <script src="js/main.js" defer></script>
