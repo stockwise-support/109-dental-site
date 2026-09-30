@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate the static 109 Dental HTML pages. Run from repo root: python3 tools/generate.py"""
 
+import argparse
 import json
 import re
 from pathlib import Path
@@ -11,6 +12,7 @@ CANON = "https://109dental.ca"
 # GH Pages (/109-dental-site/) keeps this prefix; Vercel/Hostinger/localhost
 # use the current origin + "/". Do not use path-absolute /css URLs.
 GH_PAGES_BASE = "https://stockwise-support.github.io/109-dental-site/"
+PREVIEW = True
 
 
 def u(path: str) -> str:
@@ -40,7 +42,7 @@ NAP_STREET = "Suite 204, 7125 109 St NW"
 NAP_CITY = "Edmonton, AB T6G 1B9"
 ENTITY = (
     "109 Dental is a family dental clinic in Suite 204 at 7125 109 Street NW "
-    "in Edmonton's Queen Alexandra / Strathcona area, near the University of Alberta."
+    "in Edmonton's Queen Alexandra neighbourhood, near Strathcona and the University of Alberta."
 )
 MAP_EMBED = (
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2372.7717299152596"
@@ -68,6 +70,18 @@ SERVICES = [
     ("/services/crowns-bridges/", "Crowns & Bridges"),
 ]
 
+SERVICE_DESCRIPTIONS = {
+    "Family Dentistry": "Checkups, cleanings, and ongoing care for children and adults.",
+    "Children's Dentistry": "First visits, regular checkups, and care as your child grows.",
+    "Emergency Dentist": "Call during office hours for tooth pain, a broken tooth, or a dental injury.",
+    "Wisdom Teeth": "Assessments and advice on whether removal is needed.",
+    "Dental Implants": "Find out whether an implant could replace a missing tooth.",
+    "Cosmetic Dentistry": "Talk through whitening, bonding, and veneers at an exam.",
+    "Orthodontics & Invisalign": "Clear aligners and other options for your teeth and bite.",
+    "Root Canals": "An assessment and treatment plan for a damaged or infected tooth.",
+    "Crowns & Bridges": "Options for restoring a damaged tooth or replacing a missing one.",
+}
+
 
 def esc(text: str) -> str:
     return (
@@ -92,7 +106,6 @@ def nav_html(current: str) -> str:
     return f"""
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        {item("/", "Home", "/")}
         {item("/about/", "About", "/about/")}
         <li class="has-sub">
           <a href="{u('/services/')}"{services_current}>Services</a>
@@ -102,7 +115,6 @@ def nav_html(current: str) -> str:
           </div>
         </li>
         {item("/new-patients/", "New Patients", "/new-patients/")}
-        {item("/reviews/", "Reviews", "/reviews/")}
         {item("/contact/", "Contact", "/contact/")}
       </ul>
     </nav>
@@ -115,7 +127,7 @@ def footer_html() -> str:
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">{NAP_NAME}</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>{NAP_NAME}</p>
         <p>{NAP_STREET}<br>{NAP_CITY}</p>
@@ -144,6 +156,7 @@ def footer_html() -> str:
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 """
 
@@ -151,8 +164,8 @@ def footer_html() -> str:
 def sticky_bar() -> str:
     return f"""
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-  <a class="btn btn-copper" href="{u('/contact/#book')}">Book</a>
+  <a class="btn btn-secondary" href="tel:{PHONE_TEL}">Call the clinic</a>
+  <a class="btn btn-primary" href="{u('/contact/#book')}">Request a visit</a>
 </div>
 """
 
@@ -171,7 +184,7 @@ def booking_form(default_reason: str = "other", heading: str = "Request an appoi
     return f"""
 <form class="form-card" data-booking-form action="https://formsubmit.co/{EMAIL}" method="POST">
   <h2>{heading}</h2>
-  <p class="form-note">Short request only. We reply during business hours. For pain or swelling, call {PHONE_DISPLAY} first.</p>
+  <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>.</p>
   <input type="hidden" name="_subject" value="109 Dental appointment request">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_captcha" value="false">
@@ -182,8 +195,8 @@ def booking_form(default_reason: str = "other", heading: str = "Request an appoi
   <input type="hidden" name="utm_campaign" value="">
   <input type="hidden" name="utm_content" value="">
   <input type="hidden" name="utm_term" value="">
-  <label class="hp" for="website">Website</label>
-  <input class="hp" id="website" type="text" name="_honey" tabindex="-1" autocomplete="off">
+  <div class="hp" aria-hidden="true"><label for="website">Website</label>
+  <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
   <label for="name">Name</label>
   <input id="name" name="name" type="text" required autocomplete="name">
   <label for="phone">Phone</label>
@@ -198,17 +211,25 @@ def booking_form(default_reason: str = "other", heading: str = "Request an appoi
   </select>
   <label for="notes">Notes (optional)</label>
   <textarea id="notes" name="notes"></textarea>
+  <p class="form-note">Please keep notes to scheduling details. Do not include medical records or health card numbers. Requests are sent through FormSubmit. <a href="/privacy/">Privacy information</a></p>
   <button class="btn btn-primary" type="submit">Send request</button>
 </form>
 """
 
 
-def photo(label: str, min_height: str | None = None, src: str | None = None) -> str:
+def photo(label: str, min_height: str | None = None, src: str | None = None, eager: bool = False) -> str:
     style = f' style="min-height:{min_height}"' if min_height else ""
     if src:
+        dimensions = {
+            "reception.webp": (1400, 934), "dr-steve-barkwell.webp": (221, 300),
+            "dr-guy-girtel.webp": (566, 768), "treatment-room.webp": (768, 1152),
+            "waiting-room.webp": (1100, 1650), "clinical-team.webp": (1000, 1498),
+        }
+        width, height = dimensions.get(Path(src).name, (768, 512))
         return (
             f'<figure class="photo"{style}>'
-            f'<img src="{u(src)}" alt="{esc(label)}" width="900" height="600" loading="lazy">'
+            f'<img src="{u(src)}" alt="{esc(label)}" width="{width}" height="{height}" '
+            f'loading="{"eager" if eager else "lazy"}" {"fetchpriority=high" if eager else ""} decoding="async">'
             f"</figure>"
         )
     return f'<div class="photo-ph"{style}><span>Photo placeholder: {esc(label)}</span></div>'
@@ -220,8 +241,8 @@ def faq_block(items: list[tuple[str, str]]) -> str:
         parts.append(
             f"""
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-{i}">{esc(q)}</button>
-              <div class="faq-panel" id="faq-{i}" hidden><p>{a}</p></div>
+              <details><summary>{esc(q)}</summary>
+              <div class="faq-panel"><p>{a}</p></div></details>
             </div>
             """
         )
@@ -243,7 +264,8 @@ def dentist_schema() -> str:
     return f"""
 {{
   "@context": "https://schema.org",
-  "@type": ["Dentist", "DentalClinic"],
+  "@type": "Dentist",
+  "@id": "{CANON}/#clinic",
   "name": "{NAP_NAME}",
   "url": "{CANON}/",
   "telephone": "{PHONE_TEL}",
@@ -264,13 +286,11 @@ def dentist_schema() -> str:
   }},
   "openingHoursSpecification": [
     {{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday"],"opens":"08:30","closes":"16:30"}},
-    {{"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"}},
-    {{"@type":"OpeningHoursSpecification","dayOfWeek":["Friday"],"opens":"09:00","closes":"15:00"}}
+    {{"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"}}
   ],
   "sameAs": ["{FB}", "{IG}", "{MAP_LINK}"],
   "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Whyte Avenue", "Edmonton"],
-  "isAcceptingNewPatients": true,
-  "priceRange": "$$"
+  "isAcceptingNewPatients": true
 }}
 """
 
@@ -303,6 +323,7 @@ def service_schema(name: str, url: str, desc: str) -> str:
             "description": desc,
             "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Edmonton"],
             "provider": {
+                "@id": CANON + "/#clinic",
                 "@type": "Dentist",
                 "name": NAP_NAME,
                 "telephone": PHONE_TEL,
@@ -346,12 +367,16 @@ def page(
     schemas: list[str],
     extra_head: str = "",
 ) -> None:
-    canonical = CANON + (path if path.endswith("/") or path.endswith(".html") else path + "/")
+    canonical = CANON + "/" + path.lstrip("/")
     if path == "/":
         canonical = CANON + "/"
     schema_tags = "\n".join(
         f'<script type="application/ld+json">{s.strip()}</script>' for s in schemas
     )
+    robots = '<meta name="robots" content="noindex, follow">' if PREVIEW or path in ("/thank-you/", "404.html") else ""
+    banner = '<div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>' if PREVIEW else ""
+    # Qualify fragment links because the shared base points to the site root.
+    body = re.sub(r'href="(#[^\"]+)"', lambda m: f'href="{u(path)}{m.group(1)}"', body)
     html = f"""<!DOCTYPE html>
 <html lang="en-CA">
 <head>
@@ -367,8 +392,9 @@ def page(
         base.href = location.origin + "/";
         return;
       }}
-      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {{
-        base.href = location.origin + "/109-dental-site/";
+      var project = path.split("/")[1];
+      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {{
+        base.href = location.origin + "/" + project + "/";
         return;
       }}
       base.href = location.origin + "/";
@@ -377,28 +403,30 @@ def page(
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}">
+  {robots}
   <link rel="canonical" href="{canonical}">
   <meta property="og:title" content="{esc(title)}">
   <meta property="og:description" content="{esc(description)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{canonical}">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="{CANON}/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="{u('/assets/favicon.svg')}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260930">
   {extra_head}
   {schema_tags}
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="{u(path)}#main">Skip to content</a>
+  {banner}
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>
       </div>
     </div>
@@ -406,8 +434,7 @@ def page(
       <a class="logo" href="{u('/')}"><img src="{u('/assets/brand-logo.png')}" width="190" height="72" alt="109 Dental"></a>
       {nav_html(current)}
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-        <a class="btn btn-primary" href="{u('/contact/#book')}">Book</a>
+        <a class="btn btn-primary" href="{u('/contact/#book')}">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -459,95 +486,64 @@ HOME_FAQS = [
 
 def home():
     body = f"""
-    <section class="hero hero-brand">
+    <section class="home-hero">
       <div class="container hero-grid">
-        <div>
-          <p class="kicker">Queen Alexandra / Strathcona</p>
-          <h1>Family dentistry near the University of Alberta</h1>
-          <p class="lede">{ENTITY} We look after new patients, families, and same-day emergencies when we can.</p>
-          <p>You may know us as Dr. Guy Girtel Family Dentistry. Drs. Steve Barkwell and Guy Girtel still provide general dental care in the same 109 Street office.</p>
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot"></span> New patients welcome</p>
+          <h1>Your neighbourhood dentist on <em>109 Street.</em></h1>
+          <p class="lede">Checkups, family visits, and care when a tooth is giving you trouble. Find us in Queen Alexandra, near Strathcona and the University of Alberta.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-            <a class="btn btn-secondary" href="/contact/#book">Book an appointment</a>
+            <a class="btn btn-primary" href="/contact/#book">Request an appointment <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
           </div>
-          <div class="trust-row">
-            <span class="chip">New patients welcome</span>
-            <span class="chip">CDCP accepted</span>
-            <span class="chip">Free parking</span>
-            <span class="chip">Transit on 109 Street</span>
-          </div>
+          <p class="hero-history">Formerly Dr. Guy Girtel Family Dentistry</p>
         </div>
-        {photo("The 109 Dental clinic at 7125 109 Street NW in Edmonton, with the 109 Dental sign on the building", "320px", "/assets/photos/exterior.webp")}
+        <div class="hero-photo-wrap">
+          {photo("The reception and waiting area at 109 Dental", src="/assets/photos/reception.webp", eager=True)}
+          <div class="photo-label"><span class="location-icon" aria-hidden="true">↗</span><div><strong>Come on in.</strong><span>Suite 204 · 7125 109 St NW</span></div><a href="/contact/" aria-label="Directions to 109 Dental">↗</a></div>
+        </div>
+      </div>
+    </section>
+    <div class="container visit-strip">
+      <div><span class="strip-number">01</span><p><strong>Room for the whole family</strong><span>Children, students, and adults</span></p></div>
+      <div><span class="strip-number">02</span><p><strong>Free patient parking</strong><span>Transit along 109 Street, too</span></p></div>
+      <div><span class="strip-number">03</span><p><strong>Questions about CDCP?</strong><a href="/new-patients/">See insurance and first-visit details ↗</a></p></div>
+    </div>
+    <section class="section home-services">
+      <div class="container">
+        <div class="section-heading"><div><p class="kicker">Dental care, close to home</p><h2>What brings you in?</h2></div><a class="text-link" href="/services/">All services <span aria-hidden="true">↗</span></a></div>
+        <div class="service-grid">
+          <a class="service-tile" href="/services/family-dentistry/"><span class="tile-top"><span>01 / Everyday care</span><span aria-hidden="true">↗</span></span><h3>Family dentistry</h3><p>Checkups, cleanings, fillings, and a place to bring your questions.</p></a>
+          <a class="service-tile" href="/services/emergency-dentist/"><span class="tile-top"><span>02 / Something hurts</span><span aria-hidden="true">↗</span></span><h3>Emergency visits</h3><p>A sore or broken tooth? Call during office hours so we can help with next steps.</p></a>
+          <a class="service-tile" href="/services/wisdom-teeth/"><span class="tile-top"><span>03 / Time for a look</span><span aria-hidden="true">↗</span></span><h3>Wisdom teeth</h3><p>An assessment to find out whether a wisdom tooth needs to be removed.</p></a>
+          <a class="service-tile" href="/services/orthodontics-invisalign/"><span class="tile-top"><span>04 / Planning ahead</span><span aria-hidden="true">↗</span></span><h3>Invisalign</h3><p>Talk with us about your bite and whether clear aligners are an option.</p></a>
+        </div>
       </div>
     </section>
     <section class="section section-alt">
-      <div class="container">
-        <h2>Care for everyday visits and urgent ones</h2>
-        <div class="cards">
-          <article class="card">
-            <h3><a href="/new-patients/">New patients</a></h3>
-            <p>Bring ID, insurance or CDCP information, and a medication list. We will walk you through the first visit.</p>
-          </article>
-          <article class="card">
-            <h3><a href="/services/emergency-dentist/">Emergency dentist</a></h3>
-            <p>Toothache, a broken tooth, or a knocked-out tooth. Call first and we will try to see you the same day.</p>
-          </article>
-          <article class="card">
-            <h3><a href="/services/family-dentistry/">Family dentistry</a></h3>
-            <p>Checkups, cleanings, and restorative care for kids, students, and adults in one neighbourhood clinic.</p>
-          </article>
+      <div class="container welcome-grid">
+        <div class="welcome-photo">{photo("The 109 Dental building on 109 Street in Edmonton", src="/assets/photos/exterior.webp")}<span class="photo-caption">Your dental clinic on 109 Street.</span></div>
+        <div class="welcome-copy"><p class="kicker">A familiar place</p><h2>A new name.<br>The same place to find us.</h2>
+          <p>Previously known as Dr. Guy Girtel Family Dentistry, our clinic is still at Suite 204, 7125 109 Street NW.</p>
+          <p>Dr. Barkwell and Dr. Girtel provide general and family dental care. Whether you have been coming here for years or are booking your first visit, we look forward to seeing you.</p>
+          <a class="btn btn-secondary" href="/about/">Meet the dentists <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
-    <section class="section">
-      <div class="container two-col">
-        <div>
-          <h2>Services people book most</h2>
-          <ul class="list">
-            <li><a href="/services/wisdom-teeth/">Wisdom teeth assessment and removal</a></li>
-            <li><a href="/services/dental-implants/">Dental implants</a></li>
-            <li><a href="/services/cosmetic-dentistry/">Cosmetic dentistry</a></li>
-            <li><a href="/services/orthodontics-invisalign/">Invisalign and orthodontics</a></li>
-            <li><a href="/services/childrens-dentistry/">Children's dentistry</a></li>
-            <li><a href="/services/">See all services</a></li>
-          </ul>
-        </div>
-        {photo("A treatment room and hallway inside 109 Dental", "280px", "/assets/photos/operatory.webp")}
-      </div>
-    </section>
-    <section class="section section-teal">
-      <div class="container two-col">
-        <div>
-          <h2>Need a dentist near campus or Whyte Ave?</h2>
-          <p>We are in Suite 204 at 7125 109 St NW, a short trip from the University of Alberta and Whyte Avenue. Free parking is available at the building.</p>
-          <div class="cta-row">
-            <a class="btn btn-copper" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-            <a class="btn btn-secondary" href="/contact/">Map, hours, and parking</a>
-          </div>
-        </div>
-        <div>
-          <iframe class="map-frame" title="Map of 109 Dental in Edmonton" src="{MAP_EMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="container two-col">
-        <div>
-          <h2>Common questions</h2>
-          {faq_block(HOME_FAQS)}
-        </div>
-        {booking_form("new-patient", "Book a visit")}
-      </div>
-    </section>
+    <section class="section first-visit-section"><div class="container first-visit-grid">
+      <div><p class="kicker">Your first appointment</p><h2>New here?<br>Let's start with a visit.</h2><p>Tell us what you need, ask about your coverage, and find a time that works.</p><a class="text-link" href="/new-patients/">Before your first visit ↗</a></div>
+      <ol class="visit-steps"><li><span>01</span><div><h3>Get in touch</h3><p>Call or send an appointment request. Our team will confirm a time with you.</p></div></li><li><span>02</span><div><h3>Bring the basics</h3><p>Photo ID, insurance or CDCP details, and your medication list.</p></div></li><li><span>03</span><div><h3>Tell us what's on your mind</h3><p>A sore tooth, a checkup, or a question you have been meaning to ask.</p></div></li></ol>
+    </div></section>
+    <section class="section section-teal"><div class="container location-grid">
+      <div><p class="kicker">Queen Alexandra · Edmonton</p><h2>Just off your<br>usual route.</h2><p>Near Whyte Avenue and the University of Alberta, with free parking at the building.</p><address>{NAP_STREET}<br>{NAP_CITY}</address><div class="cta-row"><a class="btn btn-light" href="{MAP_LINK}">Get directions ↗</a><a class="text-link" href="/contact/">Hours &amp; contact</a></div></div>
+      <iframe class="map-frame" title="Map of 109 Dental in Edmonton" src="{MAP_EMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div></section>
+    <section class="section"><div class="container two-col question-grid"><div><p class="kicker">Before you book</p><h2>A few common<br>questions.</h2><p>Have something else in mind? Call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>.</p></div><div>{faq_block(HOME_FAQS)}</div></div></section>
+    <section class="section section-alt" id="book"><div class="container two-col booking-section"><div><p class="kicker">We'll see you soon</p><h2>Make time<br>for your teeth.</h2><p>Request a visit below or call the clinic. We will be in touch to confirm your appointment.</p><a class="phone-link" href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>{photo("The waiting area at 109 Dental", src="/assets/photos/waiting-room.webp")}</div>{booking_form("new-patient", "Request a visit")}</div></section>
     """
-    page(
-        "/",
-        "Family Dentist in Strathcona Near U of A | 109 Dental",
-        "Family and emergency dental care in Queen Alexandra / Strathcona, near the University of Alberta. New patients and CDCP welcome.",
-        "/",
-        body,
-        [dentist_schema(), faq_schema(HOME_FAQS)],
-    )
+    page("/", "Family Dentist on 109 Street, Edmonton | 109 Dental",
+         "Family dental care in Queen Alexandra, near Strathcona and the University of Alberta. Call 109 Dental at (780) 435-5300 to book a visit.",
+         "/", body, [dentist_schema(), faq_schema(HOME_FAQS)])
 
 
 def about():
@@ -556,9 +552,9 @@ def about():
       <div class="container">
         {crumbs([("/", "Home"), ("/about/", "About")])}
         <p class="kicker">Our team</p>
-        <h1>Dentists in Queen Alexandra you can stay with</h1>
+        <h1>Meet your dentists.</h1>
         <p class="lede">{ENTITY}</p>
-        <p>109 Dental was formerly Dr. Guy Girtel Family Dentistry. Dr. Girtel still practises here with Dr. Steve Barkwell. The name changed. The neighbourhood practice did not.</p>
+        <p>109 Dental was formerly Dr. Guy Girtel Family Dentistry. Dr. Girtel still practises here with Dr. Steve Barkwell. You can find us at the same 109 Street address.</p>
       </div>
     </section>
     <section class="section section-alt">
@@ -567,13 +563,13 @@ def about():
           {photo("Dr. Steve Barkwell of 109 Dental", src="/assets/photos/dr-steve-barkwell.webp")}
           <h2>Dr. Steve Barkwell</h2>
           <p>Dr. Barkwell was born in Edmonton and completed biochemistry and dentistry degrees at UBC. He has practised in Alberta for more than 11 years.</p>
-          <p>He provides a wide range of general care, including implants, Invisalign, children's dentistry, wisdom teeth, and TMJ-related treatment. Bios should be confirmed with the clinic before launch.</p>
+          <p>He provides a wide range of general care, including implants, Invisalign, children's dentistry, wisdom teeth, and TMJ-related treatment.</p>
         </article>
         <article class="card team-card">
           {photo("Dr. Guy Girtel of 109 Dental", src="/assets/photos/dr-guy-girtel.webp")}
           <h2>Dr. Guy Girtel</h2>
           <p>Dr. Girtel has served Edmonton patients for more than 25 years, with a focus on general and family dentistry. Patients often know him from the long-running practice on 109 Street.</p>
-          <p>He is known for a calm, careful approach. Details beyond this public bio should be confirmed with Sandra.</p>
+          <p>He is known for a calm, careful approach.</p>
         </article>
       </div>
     </section>
@@ -609,7 +605,7 @@ CONTACT_FAQS = [
     ),
     (
         "What are your hours?",
-        "Monday and Tuesday 8:30 AM to 4:30 PM. Wednesday and Thursday 7:30 AM to 3:30 PM. Friday 9:00 AM to 3:00 PM. Saturday and Sunday closed. Please confirm Friday hours when you book. Public listings have not always matched.",
+        "Monday and Tuesday 8:30 AM to 4:30 PM. Wednesday and Thursday 7:30 AM to 3:30 PM. Friday 9:00 AM to 3:00 PM. Saturday and Sunday closed. Please confirm Friday hours when you book.",
     ),
     (
         "How do I book?",
@@ -625,7 +621,7 @@ def contact():
         {crumbs([("/", "Home"), ("/contact/", "Contact")])}
         <p class="kicker">Edmonton clinic</p>
         <h1>Contact 109 Dental in Strathcona</h1>
-        <p class="lede">{ENTITY} Call, email, or send a short appointment request. This map is Edmonton only.</p>
+        <p class="lede">Call, email, or send an appointment request. Find us at Suite 204, 7125 109 Street NW in Edmonton, near Strathcona and the University of Alberta.</p>
       </div>
     </section>
     <section class="section section-alt">
@@ -645,7 +641,7 @@ def contact():
             <div>Friday</div><div>9:00 AM to 3:00 PM</div>
             <div>Saturday and Sunday</div><div>Closed</div>
           </div>
-          <p class="form-note">Friday hours have appeared as 8:00 or 9:00 on different listings. Confirm with the office when you book.</p>
+          <p class="form-note">Please call to confirm Friday hours before your visit.</p>
           <h3>Parking and transit</h3>
           <p>Free patient parking at the building. Transit runs along 109 Street. We are near Whyte Avenue and a short trip from the University of Alberta.</p>
           <div class="cta-row">
@@ -695,7 +691,7 @@ NP_FAQS = [
     ),
     (
         "Do you take new patients who live near campus?",
-        "Yes. Many patients come from the University of Alberta, Garneau, Queen Alexandra, and Whyte Avenue. Free parking is available.",
+        "Yes. Our clinic is near the University of Alberta, with free parking at the building.",
     ),
 ]
 
@@ -707,14 +703,14 @@ def new_patients():
         <div>
           {crumbs([("/", "Home"), ("/new-patients/", "New patients")])}
           <p class="kicker">First visit</p>
-          <h1>New patients in Strathcona and near U of A</h1>
+          <h1>Your first visit to 109 Dental</h1>
           <p class="lede">{ENTITY} If you need a new family dentist, start with a phone call or the form on this page.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
             <a class="btn btn-secondary" href="#book">Request an appointment</a>
           </div>
         </div>
-        {photo("A team member greeting a visitor at the 109 Dental front desk", src="/assets/photos/front-desk.webp")}
+        {photo("A team member at the 109 Dental front desk", src="/assets/photos/front-desk.webp")}
       </div>
     </section>
     <section class="section section-alt">
@@ -765,50 +761,29 @@ def new_patients():
 
 def reviews():
     body = f"""
-    <section class="section">
-      <div class="container narrow">
-        {crumbs([("/", "Home"), ("/reviews/", "Reviews")])}
-        <p class="kicker">Social proof</p>
-        <h1>Reviews for 109 Dental</h1>
-        <p class="lede">We do not invent testimonials. When Sandra shares approved comments, they will appear here with a clear source. Until then, the honest path is Google and a conversation with the office.</p>
-        <div class="panel">
-          <h2>Read or leave a Google review</h2>
-          <p>Search Google for 109 Dental at Suite 204, 7125 109 St NW, Edmonton. Use the clinic listing that shows this address, not an out-of-province result.</p>
-          <div class="cta-row">
-            <a class="btn btn-primary" href="{MAP_LINK}">Open our Edmonton Google listing</a>
-            <a class="btn btn-secondary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-          </div>
-        </div>
-        <div class="notice" style="margin-top:1.2rem">
-          Placeholder for approved patient comments. Do not publish names or quotes until the clinic confirms them.
-        </div>
-        <h2>What patients often mention</h2>
-        <p>People usually want to know that we are the same 109 Street practice, that new patients can join, and that parking is straightforward. If you have a visit coming up, <a href="/new-patients/">see what to bring</a> or <a href="/contact/">book from the contact page</a>.</p>
-      </div>
-    </section>
+    <section class="section"><div class="container hero-grid"><div>
+      {crumbs([("/", "Home"), ("/reviews/", "Reviews")])}
+      <p class="kicker">From our patients</p><h1>Read about their visits.</h1>
+      <p class="lede">You can find patient reviews on our Google listing. If you have a question about your own visit, please call the clinic.</p>
+      <div class="cta-row"><a class="btn btn-primary" href="{MAP_LINK}">Visit our Google listing ↗</a><a class="text-link" href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a></div>
+      <p class="review-note">Looking for a new dentist? <a href="/new-patients/">Here's what to bring to your first visit.</a></p>
+    </div>{photo("The reception area at 109 Dental", src="/assets/photos/reception.webp", eager=True)}</div></section>
     """
-    page(
-        "/reviews/",
-        "Patient Reviews | 109 Dental Strathcona Edmonton",
-        "Find 109 Dental reviews for our Queen Alexandra / Strathcona clinic. We link to Google and only publish quotes the office approves.",
-        "/reviews/",
-        body,
-        [breadcrumb_schema([("/", "Home"), ("/reviews/", "Reviews")])],
-    )
+    page("/reviews/", "Patient Reviews | 109 Dental Edmonton", "Read patient reviews on the 109 Dental Google listing or call our Edmonton clinic with questions about your visit.", "/reviews/", body, [breadcrumb_schema([("/", "Home"), ("/reviews/", "Reviews")])])
 
 
 def services_hub():
     cards = "".join(
-        f'<article class="card"><h3><a href="{href}">{label}</a></h3><p>Care at our 109 Street clinic in Queen Alexandra, near U of A and Whyte Avenue.</p></article>'
+        f'<article class="card"><h3><a href="{href}">{label}</a></h3><p>{SERVICE_DESCRIPTIONS[label]}</p><a class="text-link" href="{href}" aria-label="Read about {esc(label)}">Read more ↗</a></article>'
         for href, label in SERVICES
     )
     body = f"""
     <section class="section">
       <div class="container">
         {crumbs([("/", "Home"), ("/services/", "Services")])}
-        <p class="kicker">Care menu</p>
+        <p class="kicker">Our services</p>
         <h1>Dental services in Strathcona</h1>
-        <p class="lede">{ENTITY} Choose the page that matches what you need. Each service has its own URL so you can go straight to the details.</p>
+        <p class="lede">{ENTITY} Find out more about the care we offer, or call if you are unsure where to start.</p>
         <div class="cards">{cards}</div>
         <div class="cta-row">
           <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
@@ -933,21 +908,21 @@ def wisdom():
         ),
         (
             "Is wisdom teeth removal always surgical?",
-            "No. Erupted teeth may be a simpler extraction. Impacted teeth can need a surgical approach. We explain that after we see you. We do not promise a specific method online.",
+            "No. Erupted teeth may be a simpler extraction. Impacted teeth can need a surgical approach. We explain that after we see you. The approach depends on the position of your teeth.",
         ),
     ]
     more = """
-    <h2>Who this page is for</h2>
+    <h2>Time to have them checked?</h2>
     <p>Students and adults near the University of Alberta, Whyte Avenue, and Strathcona who have sore or erupting wisdom teeth, or who were told to have them checked.</p>
     <h2>What to expect</h2>
     <p>We look at the teeth, the gums around them, and current x-rays. Removal is recommended only when it is the better option for your mouth. Some wisdom teeth stay and are monitored.</p>
-    <p>If removal is planned, the visit can range from a straightforward extraction with local anaesthetic to a more involved appointment for teeth still in the bone. Aftercare instructions cover swelling, eating, and when to call us. Healing varies. We will not promise a pain-free recovery.</p>
-    <h2>Why people book here</h2>
+    <p>If removal is planned, the visit can range from a straightforward extraction with local anaesthetic to a more involved appointment for teeth still in the bone. Aftercare instructions cover swelling, eating, and when to call us. Your dentist will explain what recovery may involve and how to care for the area.</p>
+    <h2>Planning your visit</h2>
     <ul class="list">
-      <li>Neighbourhood clinic on 109 Street, not a downtown maze</li>
-      <li>Family dentists who already treat many campus-area patients</li>
+      <li>Suite 204, 7125 109 Street NW</li>
+      <li>Near the University of Alberta and Whyte Avenue</li>
       <li>New patients welcome, including CDCP</li>
-      <li>Free parking and a clear phone number: (780) 435-5300</li>
+      <li>Free patient parking at the building</li>
     </ul>
     """
     extra_top = f"""
@@ -957,7 +932,7 @@ def wisdom():
         "wisdom-teeth",
         "Wisdom Teeth Removal Near U of A | 109 Dental",
         "Wisdom teeth assessment and removal in Strathcona / near U of A. Call (780) 435-5300 or request a visit at 109 Dental.",
-        "Wisdom Teeth Removal in Strathcona / Near U of A",
+        "Wisdom teeth care, close to campus.",
         "If a wisdom tooth is sore, swollen, or overdue for a look, 109 Dental can assess it at Suite 204, 7125 109 St NW. We explain options in plain language and book removal only when it makes sense.",
         more,
         "wisdom",
@@ -977,7 +952,7 @@ def remaining_services():
         "Family Dentistry in Queen Alexandra | 109 Dental",
         "Family dentistry in Queen Alexandra / Strathcona near U of A. Checkups, cleanings, and restorative care for all ages.",
         "Family dentistry in Queen Alexandra",
-        f"{ENTITY} This page is for households who want one clinic for checkups, fillings, and ongoing care.",
+        f"{ENTITY} We see children and adults for checkups, fillings, and ongoing care.",
         """
         <h2>What family care includes</h2>
         <p>Exams, cleanings, fillings, and the everyday work that keeps kids and adults comfortable. When someone needs a crown, implant, or Invisalign, we discuss that on a dedicated visit.</p>
@@ -1000,7 +975,7 @@ def remaining_services():
         "If you have sudden tooth pain, a broken tooth, or a dental injury near Whyte Avenue or campus, call 109 Dental first. We help you decide how soon you need to be seen.",
         """
         <h2>Call us during office hours</h2>
-        <p>Phone (780) 435-5300. We try to see emergencies the same day when the schedule allows. We are not a 24-hour hospital. If bleeding will not stop, or swelling affects breathing or an eye, go to emergency care.</p>
+        <p>Phone (780) 435-5300. We try to see emergencies the same day when the schedule allows. For urgent problems outside office hours, seek emergency care. If bleeding will not stop, or swelling affects breathing or an eye, go to emergency care.</p>
         <h2>Until you arrive</h2>
         <ul class="list">
           <li>Toothache: rinse with warm water, floss gently, use a cold compress on the cheek. Do not put aspirin on the gum.</li>
@@ -1022,13 +997,13 @@ def remaining_services():
     service_page(
         "cosmetic-dentistry",
         "Cosmetic Dentistry in Strathcona | 109 Dental Edmonton",
-        "Cosmetic dentistry in Strathcona near Whyte Avenue: whitening, veneers, and bonding discussed after a real exam.",
+        "Cosmetic dentistry in Strathcona near Whyte Avenue: whitening, veneers, and bonding discussed after an exam.",
         "Cosmetic dentistry in Strathcona",
         "If you want a brighter or more even smile, start with an exam at our 109 Street clinic. Whitening, bonding, and veneers are options we discuss after we see your teeth.",
         """
         <h2>What we can talk through</h2>
-        <p>Whitening, bonding, and veneers are the usual cosmetic requests. Some smiles need a crown or orthodontics first. We will say so instead of selling a treatment that will not last.</p>
-        <p>Results vary. We will not publish before-and-after cases unless the clinic approves them.</p>
+        <p>Whitening, bonding, and veneers are the usual cosmetic requests. Some smiles need a crown or orthodontics first. We will explain the options after examining your teeth.</p>
+        <p>Ask us about the expected results, upkeep, and cost of each option.</p>
         """,
         "other",
         [
@@ -1037,7 +1012,7 @@ def remaining_services():
         ],
         [("/services/orthodontics-invisalign/", "Invisalign"), ("/services/crowns-bridges/", "Crowns and bridges")],
         photo_src="/assets/photos/treatment-room.webp",
-        photo_alt="A 109 Dental team member in a treatment room discussing smile options",
+        photo_alt="A team member in a treatment room at 109 Dental",
     )
     service_page(
         "dental-implants",
@@ -1048,16 +1023,16 @@ def remaining_services():
         """
         <h2>How implants work in plain terms</h2>
         <p>An implant is a titanium post placed in the jaw, then a connector and a crown. It can replace one tooth or support more than one, if your health and bone allow it.</p>
-        <p>Not every patient is a candidate on the first visit. We explain that after x-rays and a health review. Healing takes time. Online claims of instant perfect smiles are not how we work.</p>
+        <p>Not every patient is a candidate on the first visit. We explain that after x-rays and a health review. Healing takes time. We will explain the stages of treatment before you decide.</p>
         """,
         "other",
         [
             ("Do you place implants at this clinic?", "Dr. Barkwell provides implant care as part of general dentistry. A consult tells us whether you can be treated here or need a specialist."),
-            ("Will insurance or CDCP help?", "Sometimes. Implant benefits vary widely. Bring your plan details to the consult."),
+            ("Does CDCP cover dental implants?", "CDCP does not cover dental implants or implant-related procedures. Private insurance benefits vary. Bring your plan details so we can help you check your coverage."),
         ],
         [("/services/crowns-bridges/", "Crowns and bridges"), ("/services/family-dentistry/", "Family dentistry")],
         photo_src="/assets/photos/operatory.webp",
-        photo_alt="A treatment room at 109 Dental used for implant consults",
+        photo_alt="A treatment room at 109 Dental",
     )
     service_page(
         "orthodontics-invisalign",
@@ -1088,7 +1063,7 @@ def remaining_services():
         """
         <h2>First visits</h2>
         <p>We keep first appointments simple: a look, a conversation with the parent or caregiver, and treatment only when it is needed. Tell us if your child is anxious.</p>
-        <p>For injuries, call the emergency line on this site. Stay calm with your child and we will help you decide next steps.</p>
+        <p>For a dental injury, call (780) 435-5300 during office hours so we can help with next steps.</p>
         """,
         "new-patient",
         [
@@ -1107,7 +1082,7 @@ def remaining_services():
         "A toothache that lingers, or a tooth the dentist flagged, may need a root canal. We assess first and explain the plan before we start.",
         """
         <h2>What a root canal is for</h2>
-        <p>The goal is to keep a tooth that would otherwise be lost to infection or deep decay. Some teeth need a crown afterward. Some need extraction instead. That decision is clinical, not a website promise.</p>
+        <p>The goal is to keep a tooth that would otherwise be lost to infection or deep decay. Some teeth need a crown afterward. Some need extraction instead. Your dentist will explain which options are suitable for the tooth.</p>
         """,
         "other",
         [
@@ -1131,7 +1106,7 @@ def remaining_services():
         "other",
         [
             ("How long does a crown take?", "Often more than one visit. Timing depends on the tooth and the lab work. We will outline that before you book treatment."),
-            ("Is a bridge better than an implant?", "It depends on the bone, the neighbouring teeth, and your budget. That is a consult question, not a slogan."),
+            ("Is a bridge better than an implant?", "It depends on the bone, the neighbouring teeth, and your budget. We can compare the options at your appointment."),
         ],
         [("/services/dental-implants/", "Dental implants"), ("/services/family-dentistry/", "Family dentistry")],
         photo_src="/assets/photos/reception.webp",
@@ -1151,7 +1126,7 @@ def legal():
         <h1>Privacy</h1>
         <p>Appointment forms go to {EMAIL} through FormSubmit. Use the form for scheduling, not for detailed health records.</p>
         <p>Do not send personal health numbers or full medical histories through the website. Bring those to the clinic or call {PHONE_DISPLAY}.</p>
-        <p>This preview site may be hosted on a temporary domain before DNS points to 109dental.ca. Hosting and form processors keep their own logs.</p>
+        <p>The website host and form processor may keep technical logs. Please call the clinic if you have questions about an appointment request.</p>
         </div></section>
         """,
         [breadcrumb_schema([("/", "Home"), ("/privacy/", "Privacy")])],
@@ -1174,11 +1149,11 @@ def legal():
     page(
         "/thank-you/",
         "Request Received | 109 Dental",
-        "Your appointment request was sent to 109 Dental. We reply during business hours.",
+        "Thank you for contacting 109 Dental. Our team will confirm your appointment during office hours.",
         "/thank-you/",
         f"""
         <section class="section"><div class="container narrow">
-        <h1>We received your request</h1>
+        <h1>Thank you for getting in touch.</h1>
         <p>The office reviews messages during open hours. If you are in pain, call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a> instead of waiting on email.</p>
         <p><a href="/">Back to the homepage</a></p>
         </div></section>
@@ -1210,7 +1185,6 @@ def write_support_files():
         "/services/",
         "/privacy/",
         "/accessibility/",
-        "/thank-you/",
     ] + [href for href, _ in SERVICES]
     urlset = "\n".join(
         f"  <url><loc>{CANON}{u}</loc><changefreq>monthly</changefreq></url>" for u in urls
@@ -1280,6 +1254,10 @@ ErrorDocument 404 /404.html
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--production", action="store_true", help="Remove preview banner and allow indexing; use only for an approved launch.")
+    args = parser.parse_args()
+    PREVIEW = not args.production
     home()
     about()
     contact()

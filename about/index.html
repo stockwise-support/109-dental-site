@@ -13,8 +13,9 @@
         base.href = location.origin + "/";
         return;
       }
-      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {
-        base.href = location.origin + "/109-dental-site/";
+      var project = path.split("/")[1];
+      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {
+        base.href = location.origin + "/" + project + "/";
         return;
       }
       base.href = location.origin + "/";
@@ -23,22 +24,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Drs. Barkwell &amp; Girtel | 109 Dental Queen Alexandra</title>
   <meta name="description" content="Meet Drs. Steve Barkwell and Guy Girtel at 109 Dental, formerly Dr. Guy Girtel Family Dentistry, in Queen Alexandra near U of A.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://109dental.ca/about/">
   <meta property="og:title" content="Drs. Barkwell &amp; Girtel | 109 Dental Queen Alexandra">
   <meta property="og:description" content="Meet Drs. Steve Barkwell and Guy Girtel at 109 Dental, formerly Dr. Guy Girtel Family Dentistry, in Queen Alexandra near U of A.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/about/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930">
   
   <script type="application/ld+json">{
   "@context": "https://schema.org",
-  "@type": ["Dentist", "DentalClinic"],
+  "@type": "Dentist",
+  "@id": "https://109dental.ca/#clinic",
   "name": "109 Dental",
   "url": "https://109dental.ca/",
   "telephone": "+17804355300",
@@ -59,23 +63,21 @@
   },
   "openingHoursSpecification": [
     {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday"],"opens":"08:30","closes":"16:30"},
-    {"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"},
-    {"@type":"OpeningHoursSpecification","dayOfWeek":["Friday"],"opens":"09:00","closes":"15:00"}
+    {"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"}
   ],
   "sameAs": ["https://www.facebook.com/109Dental", "https://www.instagram.com/109Dental", "https://www.google.com/maps/place/109+Dental/@53.508273,-113.5113761,15z/data=!4m6!3m5!1s0x53a021ff735aaf45:0x2c79bd58134a09ae!8m2!3d53.508273!4d-113.5113761"],
   "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Whyte Avenue", "Edmonton"],
-  "isAcceptingNewPatients": true,
-  "priceRange": "$$"
+  "isAcceptingNewPatients": true
 }</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "About", "item": "https://109dental.ca/about/"}]}</script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="about/#main">Skip to content</a>
+  <div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -84,7 +86,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/" aria-current="page">About</a></li>
         <li class="has-sub">
           <a href="services/">Services</a>
@@ -102,14 +103,12 @@
           </div>
         </li>
         <li><a href="new-patients/">New Patients</a></li>
-        <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -120,24 +119,24 @@
       <div class="container">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>About</span></nav>
         <p class="kicker">Our team</p>
-        <h1>Dentists in Queen Alexandra you can stay with</h1>
-        <p class="lede">109 Dental is a family dental clinic in Suite 204 at 7125 109 Street NW in Edmonton's Queen Alexandra / Strathcona area, near the University of Alberta.</p>
-        <p>109 Dental was formerly Dr. Guy Girtel Family Dentistry. Dr. Girtel still practises here with Dr. Steve Barkwell. The name changed. The neighbourhood practice did not.</p>
+        <h1>Meet your dentists.</h1>
+        <p class="lede">109 Dental is a family dental clinic in Suite 204 at 7125 109 Street NW in Edmonton's Queen Alexandra neighbourhood, near Strathcona and the University of Alberta.</p>
+        <p>109 Dental was formerly Dr. Guy Girtel Family Dentistry. Dr. Girtel still practises here with Dr. Steve Barkwell. You can find us at the same 109 Street address.</p>
       </div>
     </section>
     <section class="section section-alt">
       <div class="container two-col">
         <article class="card team-card">
-          <figure class="photo"><img src="assets/photos/dr-steve-barkwell.webp" alt="Dr. Steve Barkwell of 109 Dental" width="900" height="600" loading="lazy"></figure>
+          <figure class="photo"><img src="assets/photos/dr-steve-barkwell.webp" alt="Dr. Steve Barkwell of 109 Dental" width="221" height="300" loading="lazy"  decoding="async"></figure>
           <h2>Dr. Steve Barkwell</h2>
           <p>Dr. Barkwell was born in Edmonton and completed biochemistry and dentistry degrees at UBC. He has practised in Alberta for more than 11 years.</p>
-          <p>He provides a wide range of general care, including implants, Invisalign, children's dentistry, wisdom teeth, and TMJ-related treatment. Bios should be confirmed with the clinic before launch.</p>
+          <p>He provides a wide range of general care, including implants, Invisalign, children's dentistry, wisdom teeth, and TMJ-related treatment.</p>
         </article>
         <article class="card team-card">
-          <figure class="photo"><img src="assets/photos/dr-guy-girtel.webp" alt="Dr. Guy Girtel of 109 Dental" width="900" height="600" loading="lazy"></figure>
+          <figure class="photo"><img src="assets/photos/dr-guy-girtel.webp" alt="Dr. Guy Girtel of 109 Dental" width="566" height="768" loading="lazy"  decoding="async"></figure>
           <h2>Dr. Guy Girtel</h2>
           <p>Dr. Girtel has served Edmonton patients for more than 25 years, with a focus on general and family dentistry. Patients often know him from the long-running practice on 109 Street.</p>
-          <p>He is known for a calm, careful approach. Details beyond this public bio should be confirmed with Sandra.</p>
+          <p>He is known for a calm, careful approach.</p>
         </article>
       </div>
     </section>
@@ -152,7 +151,7 @@
             <a class="btn btn-secondary" href="new-patients/">New patient information</a>
           </div>
         </div>
-        <figure class="photo"><img src="assets/photos/reception.webp" alt="Reception at 109 Dental, with the curved front desk and waiting chairs" width="900" height="600" loading="lazy"></figure>
+        <figure class="photo"><img src="assets/photos/reception.webp" alt="Reception at 109 Dental, with the curved front desk and waiting chairs" width="1400" height="934" loading="lazy"  decoding="async"></figure>
       </div>
     </section>
     
@@ -161,7 +160,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -198,12 +197,13 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
   <script src="js/main.js" defer></script>
