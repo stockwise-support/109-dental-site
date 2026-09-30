@@ -60,7 +60,6 @@
 
   var params = new URLSearchParams(window.location.search);
   var campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-  var filePreview = /^(raw|rawcdn)\.githack\.com$/.test(window.location.hostname);
   var reasonSelect = form && form.querySelector("[name='reason']");
   if (reasonSelect && Array.from(reasonSelect.options).some(function (option) { return option.value === params.get("reason"); })) {
     reasonSelect.value = params.get("reason");
@@ -76,15 +75,13 @@
       var reason = form && form.querySelector("[name='reason']");
       if (reason) url.searchParams.set("reason", reason.value);
     }
-    // File-based branch previews do not serve directory indexes automatically.
-    if (filePreview && url.pathname.endsWith("/")) url.pathname += "index.html";
     link.href = url.href;
   });
 
   if (form) {
     var nextField = form.querySelector("[name='_next']");
     if (nextField) {
-      nextField.value = siteBase() + "thank-you/" + (filePreview ? "index.html" : "");
+      nextField.value = siteBase() + "thank-you/";
     }
 
     var pageField = form.querySelector("[name='page']");

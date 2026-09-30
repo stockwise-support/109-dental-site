@@ -35,13 +35,11 @@ Production mode removes the preview banner and general noindex rule. Thank-you a
 
 Assets and navigation are base-relative. Keep GitHub's `/109-dental-site/` prefix and the root-domain behavior intact.
 
-The inline base script supports GitHub Pages, Hostinger, the production domain and localhost. It also supports public, commit-pinned raw.githack.com / rawcdn.githack.com previews. Those previews use explicit index.html links because file servers do not resolve directory indexes. This is implemented in js/main.js and does not affect normal hosts.
+The inline base script supports the original and review GitHub Pages projects, Hostinger, the production domain and localhost.
 
-A commit preview has this shape:
+Local review: http://127.0.0.1:8099/ after starting the server above.
 
-`https://raw.githack.com/stockwise-support/109-dental-site/COMMIT_SHA/index.html`
-
-These are third-party review links, not production hosting. Verify nested navigation and assets before sharing. Do not share a branch URL expecting cache invalidation; use a commit SHA.
+A separate 109-dental-review GitHub Pages project is supported by the base-path code but has not been created or published. Public review publication needs AJ's approval. The source of truth remains stockwise-support/109-dental-site.
 
 Existing previews (unchanged until a separately approved deployment):
 

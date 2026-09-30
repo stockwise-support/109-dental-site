@@ -13,12 +13,9 @@
         base.href = location.origin + "/";
         return;
       }
-      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {
-        base.href = location.origin + "/109-dental-site/";
-        return;
-      }
-      if (host === "raw.githack.com" || host === "rawcdn.githack.com") {
-        base.href = location.origin + path.split("/").slice(0, 4).join("/") + "/";
+      var project = path.split("/")[1];
+      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {
+        base.href = location.origin + "/" + project + "/";
         return;
       }
       base.href = location.origin + "/";
