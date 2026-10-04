@@ -496,7 +496,6 @@ def home():
             <a class="btn btn-primary" href="/contact/#book">Request an appointment <span aria-hidden="true">↗</span></a>
             <a class="text-link" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
           </div>
-          <p class="hero-history">Formerly Dr. Guy Girtel Family Dentistry</p>
         </div>
         <div class="hero-photo-wrap">
           {photo("The reception and waiting area at 109 Dental", src="/assets/photos/reception.webp", eager=True)}
@@ -523,8 +522,8 @@ def home():
     <section class="section section-alt">
       <div class="container welcome-grid">
         <div class="welcome-photo">{photo("The 109 Dental building on 109 Street in Edmonton", src="/assets/photos/exterior.webp")}<span class="photo-caption">Your dental clinic on 109 Street.</span></div>
-        <div class="welcome-copy"><p class="kicker">A familiar place</p><h2>A new name.<br>The same place to find us.</h2>
-          <p>Previously known as Dr. Guy Girtel Family Dentistry, our clinic is still at Suite 204, 7125 109 Street NW.</p>
+        <div class="welcome-copy"><p class="kicker">109 Dental</p><h2>Come see us<br>on 109 Street.</h2>
+          <p>Find our clinic at Suite 204, 7125 109 Street NW.</p>
           <p>Dr. Barkwell and Dr. Girtel provide general and family dental care. Whether you have been coming here for years or are booking your first visit, we look forward to seeing you.</p>
           <a class="btn btn-secondary" href="/about/">Meet the dentists <span aria-hidden="true">↗</span></a>
         </div>
@@ -554,7 +553,7 @@ def about():
         <p class="kicker">Our team</p>
         <h1>Meet your dentists.</h1>
         <p class="lede">{ENTITY}</p>
-        <p>109 Dental was formerly Dr. Guy Girtel Family Dentistry. Dr. Girtel still practises here with Dr. Steve Barkwell. You can find us at the same 109 Street address.</p>
+        <p>Dr. Steve Barkwell and Dr. Guy Girtel provide general and family dental care at 109 Dental.</p>
       </div>
     </section>
     <section class="section section-alt">
@@ -578,7 +577,7 @@ def about():
         <div>
           <h2>What to expect</h2>
           <p>We are a general dental clinic for families, students, and long-time patients. We accept new patients and the Canadian Dental Care Plan. Direct billing is available for many insurance plans.</p>
-          <p>If you are returning after the name change, you are in the same building: Suite 204, 7125 109 St NW.</p>
+          <p>Visit us at Suite 204, 7125 109 St NW.</p>
           <div class="cta-row">
             <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
             <a class="btn btn-secondary" href="/new-patients/">New patient information</a>
@@ -591,7 +590,7 @@ def about():
     page(
         "/about/",
         "Drs. Barkwell & Girtel | 109 Dental Queen Alexandra",
-        "Meet Drs. Steve Barkwell and Guy Girtel at 109 Dental, formerly Dr. Guy Girtel Family Dentistry, in Queen Alexandra near U of A.",
+        "Meet Drs. Steve Barkwell and Guy Girtel at 109 Dental in Queen Alexandra, near the University of Alberta.",
         "/about/",
         body,
         [dentist_schema(), breadcrumb_schema([("/", "Home"), ("/about/", "About")])],
@@ -1218,7 +1217,7 @@ def write_support_files():
 Family dentistry, children's dentistry, emergency dentist, wisdom teeth removal, dental implants, cosmetic dentistry, orthodontics and Invisalign, root canals, crowns and bridges.
 
 ## Team
-Dr. Steve Barkwell and Dr. Guy Girtel. Formerly Dr. Guy Girtel Family Dentistry.
+Dr. Steve Barkwell and Dr. Guy Girtel.
 
 ## Booking
 Call {PHONE_DISPLAY} or use the appointment form on {CANON}/contact/
