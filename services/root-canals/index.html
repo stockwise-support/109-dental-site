@@ -13,8 +13,9 @@
         base.href = location.origin + "/";
         return;
       }
-      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {
-        base.href = location.origin + "/109-dental-site/";
+      var project = path.split("/")[1];
+      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {
+        base.href = location.origin + "/" + project + "/";
         return;
       }
       base.href = location.origin + "/";
@@ -23,30 +24,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Root Canal Treatment in Strathcona | 109 Dental</title>
   <meta name="description" content="Root canal treatment in Strathcona near U of A. We assess the tooth and explain whether a root canal or another option is next.">
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="https://109dental.ca/services/root-canals/">
   <meta property="og:title" content="Root Canal Treatment in Strathcona | 109 Dental">
   <meta property="og:description" content="Root canal treatment in Strathcona near U of A. We assess the tooth and explain whether a root canal or another option is next.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/services/root-canals/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20260930">
   
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "name": "Root canals in Queen Alexandra", "serviceType": "Root canals in Queen Alexandra", "url": "https://109dental.ca/services/root-canals/", "description": "Root canal treatment in Strathcona near U of A. We assess the tooth and explain whether a root canal or another option is next.", "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Edmonton"], "provider": {"@type": "Dentist", "name": "109 Dental", "telephone": "+17804355300", "address": {"@type": "PostalAddress", "streetAddress": "Suite 204, 7125 109 St NW", "addressLocality": "Edmonton", "addressRegion": "AB", "postalCode": "T6G 1B9", "addressCountry": "CA"}}}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "name": "Root canals in Queen Alexandra", "serviceType": "Root canals in Queen Alexandra", "url": "https://109dental.ca/services/root-canals/", "description": "Root canal treatment in Strathcona near U of A. We assess the tooth and explain whether a root canal or another option is next.", "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Edmonton"], "provider": {"@id": "https://109dental.ca/#clinic", "@type": "Dentist", "name": "109 Dental", "telephone": "+17804355300", "address": {"@type": "PostalAddress", "streetAddress": "Suite 204, 7125 109 St NW", "addressLocality": "Edmonton", "addressRegion": "AB", "postalCode": "T6G 1B9", "addressCountry": "CA"}}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "Services", "item": "https://109dental.ca/services/"}, {"@type": "ListItem", "position": 3, "name": "Root canals in Queen Alexandra", "item": "https://109dental.ca/services/root-canals/"}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does a root canal always save the tooth?", "acceptedAnswer": {"@type": "Answer", "text": "Not always. We tell you if the tooth is a poor candidate and talk about extraction or an implant if that is safer."}}, {"@type": "Question", "name": "Can this wait if I am in pain?", "acceptedAnswer": {"@type": "Answer", "text": "Call us. Waiting with an infection can make the visit harder. Use the emergency page if you need same-day advice."}}]}</script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="services/root-canals/#main">Skip to content</a>
+  <div class="preview-banner">Website preview <span>·</span> Prepared for 109 Dental</div>
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -55,7 +58,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li class="has-sub">
           <a href="services/" aria-current="page">Services</a>
@@ -73,14 +75,12 @@
           </div>
         </li>
         <li><a href="new-patients/">New Patients</a></li>
-        <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -96,7 +96,7 @@
         
         <div class="hero-actions">
           <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-          <a class="btn btn-secondary" href="#book">Book / request an appointment</a>
+          <a class="btn btn-secondary" href="services/root-canals/#book">Book / request an appointment</a>
         </div>
       </div>
     </section>
@@ -105,12 +105,12 @@
         <div>
           
         <h2>What a root canal is for</h2>
-        <p>The goal is to keep a tooth that would otherwise be lost to infection or deep decay. Some teeth need a crown afterward. Some need extraction instead. That decision is clinical, not a website promise.</p>
+        <p>The goal is to keep a tooth that would otherwise be lost to infection or deep decay. Some teeth need a crown afterward. Some need extraction instead. Your dentist will explain which options are suitable for the tooth.</p>
         
           <h2>Related care</h2>
           <ul class="list"><li><a href="services/emergency-dentist/">Emergency dentist</a></li><li><a href="services/crowns-bridges/">Crowns and bridges</a></li></ul>
         </div>
-        <figure class="photo"><img src="assets/photos/operatory.webp" alt="A treatment room at 109 Dental" width="900" height="600" loading="lazy"></figure>
+        <figure class="photo"><img src="assets/photos/operatory.webp" alt="A treatment room at 109 Dental" width="768" height="512" loading="lazy"  decoding="async"></figure>
       </div>
     </section>
     <section class="section" id="book">
@@ -118,7 +118,7 @@
         
 <form class="form-card" data-booking-form action="https://formsubmit.co/dental_appointment@shaw.ca" method="POST">
   <h2>Request this visit</h2>
-  <p class="form-note">Short request only. We reply during business hours. For pain or swelling, call (780) 435-5300 first.</p>
+  <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:+17804355300">(780) 435-5300</a>.</p>
   <input type="hidden" name="_subject" value="109 Dental appointment request">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_captcha" value="false">
@@ -129,8 +129,8 @@
   <input type="hidden" name="utm_campaign" value="">
   <input type="hidden" name="utm_content" value="">
   <input type="hidden" name="utm_term" value="">
-  <label class="hp" for="website">Website</label>
-  <input class="hp" id="website" type="text" name="_honey" tabindex="-1" autocomplete="off">
+  <div class="hp" aria-hidden="true"><label for="website">Website</label>
+  <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
   <label for="name">Name</label>
   <input id="name" name="name" type="text" required autocomplete="name">
   <label for="phone">Phone</label>
@@ -148,6 +148,7 @@
   </select>
   <label for="notes">Notes (optional)</label>
   <textarea id="notes" name="notes"></textarea>
+  <p class="form-note">Please keep notes to scheduling details. Do not include medical records or health card numbers. Requests are sent through FormSubmit. <a href="privacy/">Privacy information</a></p>
   <button class="btn btn-primary" type="submit">Send request</button>
 </form>
 
@@ -156,14 +157,14 @@
           <div class="faq">
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-1">Does a root canal always save the tooth?</button>
-              <div class="faq-panel" id="faq-1" hidden><p>Not always. We tell you if the tooth is a poor candidate and talk about extraction or an implant if that is safer.</p></div>
+              <details><summary>Does a root canal always save the tooth?</summary>
+              <div class="faq-panel"><p>Not always. We tell you if the tooth is a poor candidate and talk about extraction or an implant if that is safer.</p></div></details>
             </div>
             
 
             <div class="faq-item">
-              <button type="button" data-faq-button aria-expanded="false" aria-controls="faq-2">Can this wait if I am in pain?</button>
-              <div class="faq-panel" id="faq-2" hidden><p>Call us. Waiting with an infection can make the visit harder. Use the emergency page if you need same-day advice.</p></div>
+              <details><summary>Can this wait if I am in pain?</summary>
+              <div class="faq-panel"><p>Call us. Waiting with an infection can make the visit harder. Use the emergency page if you need same-day advice.</p></div></details>
             </div>
             
 </div>
@@ -178,7 +179,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -215,12 +216,13 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
   <script src="js/main.js" defer></script>
