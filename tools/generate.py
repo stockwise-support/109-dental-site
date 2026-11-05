@@ -36,7 +36,10 @@ def rebase_html(html: str) -> str:
     return re.sub(r"\b(href|src)=([\"'])([^\"']+)\2", repl, html)
 PHONE_DISPLAY = "(780) 435-5300"
 PHONE_TEL = "+17804355300"
+# Public clinic contact. Footer, contact page, and JSON-LD keep this address.
 EMAIL = "dental_appointment@shaw.ca"
+# Appointment form delivery only. Not the public mailto or clinic schema email.
+BOOKING_EMAIL = "109dentaloffice@gmail.com"
 NAP_NAME = "109 Dental"
 NAP_STREET = "Suite 204, 7125 109 St NW"
 NAP_CITY = "Edmonton, AB T6G 1B9"
@@ -182,7 +185,7 @@ def booking_form(default_reason: str = "other", heading: str = "Request an appoi
         for value, label in reasons
     )
     return f"""
-<form class="form-card" data-booking-form action="https://formsubmit.co/{EMAIL}" method="POST">
+<form class="form-card" data-booking-form action="https://formsubmit.co/{BOOKING_EMAIL}" method="POST">
   <h2>{heading}</h2>
   <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>.</p>
   <input type="hidden" name="_subject" value="109 Dental appointment request">
@@ -1123,7 +1126,7 @@ def legal():
         <section class="section"><div class="container narrow">
         {crumbs([("/", "Home"), ("/privacy/", "Privacy")])}
         <h1>Privacy</h1>
-        <p>Appointment forms go to {EMAIL} through FormSubmit. Use the form for scheduling, not for detailed health records.</p>
+        <p>Appointment forms go to {BOOKING_EMAIL} through FormSubmit. Use the form for scheduling, not for detailed health records.</p>
         <p>Do not send personal health numbers or full medical histories through the website. Bring those to the clinic or call {PHONE_DISPLAY}.</p>
         <p>The website host and form processor may keep technical logs. Please call the clinic if you have questions about an appointment request.</p>
         </div></section>

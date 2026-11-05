@@ -29,7 +29,7 @@ Production mode removes the preview banner and general noindex rule. Thank-you a
 - Native details/summary FAQs remain usable without JavaScript.
 - Page-qualified booking and skip anchors work with the shared base tag.
 - Campaign parameters stay in same-site navigation. No new cookies, storage, analytics or Meta IDs were added.
-- Forms continue to POST to FormSubmit at dental_appointment@shaw.ca. No real test request has been sent as part of the refresh.
+- Appointment forms POST to FormSubmit at 109dentaloffice@gmail.com. The public contact address remains dental_appointment@shaw.ca. No real test request has been sent.
 
 ## Base paths and review links
 
@@ -51,10 +51,10 @@ GitHub Pages is configured to build main. Hostinger historically used cursor/fix
 ## Clinic facts awaiting confirmation
 
 - Friday hours. The existing site's 9 AM to 3 PM hours remain visible with a call-to-confirm note; Friday is omitted from schema until confirmed.
-- Current CDCP participation, direct billing, and new-patient availability.
+- Direct billing and new-patient availability. Existing pages already say CDCP is accepted; that copy was left unchanged.
 - Steve/Steven Barkwell spelling, both dentists' bios, offered services and emergency arrangements.
 - Parking/building-access instructions and official social accounts.
-- Appointment mailbox activation, delivery and staff response ownership.
+- FormSubmit activation for 109dentaloffice@gmail.com. The inbox must open FormSubmit's one-time confirmation before requests are delivered. Do not send a test submission to trigger that email. Staff response ownership is still open.
 - Any patient quote needs the appropriate approval and consent. The review page only links to the clinic's Google listing.
 
 The implant FAQ distinguishes CDCP exclusions from private coverage, based on Health Canada's CDCP Dental Benefits Guide: https://www.canada.ca/en/services/benefits/dental/dental-care-plan/guide.html
@@ -70,6 +70,6 @@ AJ must approve a merge and DNS cutover separately. No email or message to the c
 ## Identity and assets
 
 109 Dental, Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9.
-Phone: (780) 435-5300. Email: dental_appointment@shaw.ca.
+Phone: (780) 435-5300. Public email: dental_appointment@shaw.ca. Booking form delivery: 109dentaloffice@gmail.com.
 
 Use the existing clinic images in assets/photos and original logo in assets/brand-logo.png. See assets/photos/SOURCES.txt. Do not mix Vista or Redwater content, tracking or assets into this repository. Do not invent clinic facts, medical claims or awards. Keep copy direct, with no em dashes.
