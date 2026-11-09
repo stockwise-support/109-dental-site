@@ -41,12 +41,12 @@ Local review: http://127.0.0.1:8099/ after starting the server above.
 
 A separate 109-dental-review GitHub Pages project is supported by the base-path code but has not been created or published. Public review publication needs AJ's approval. The source of truth remains stockwise-support/109-dental-site.
 
-Existing previews (unchanged until a separately approved deployment):
+Preview locations:
 
 - https://stockwise-support.github.io/109-dental-site/
 - https://palevioletred-ant-543523.hostingersite.com/
 
-GitHub Pages is configured to build main. Hostinger historically used cursor/fix-gh-pages-css-3e09. Confirm the actual connection and prefer main. Do not force-push or change DNS to publish a review.
+GitHub Pages builds main and still shows the older build. Hostinger auto-deploys cursor/fix-gh-pages-css-3e09, verified during review updates. Do not force-push or change DNS to publish a review.
 
 ## Clinic facts awaiting confirmation
 
@@ -61,7 +61,7 @@ The implant FAQ distinguishes CDCP exclusions from private coverage, based on He
 
 ## Launch hold
 
-The September 30 audit found 37 old-site URLs missing from the rebuild. URL mapping/content preservation is separate launch work. Do not cut over until that migration is resolved. Search Console baseline data and clinic approvals are also outstanding.
+The November 8 migration map accounts for all 42 current production sitemap URLs: 19 retained paths and 23 exact permanent redirects. See tools/migration.json and docs/LAUNCH.md. Clinical sign-off, booking inbox delivery, account-level checks, and approved production deployment remain launch gates.
 
 Verify production robots.txt directly. The Hostinger temporary hostname served a Googlebot block that differed from the repository file during the audit. Preview noindex must not accidentally remain on production, and robots must allow crawlers to read noindex on review hosts.
 
@@ -73,3 +73,7 @@ AJ must approve a merge and DNS cutover separately. No email or message to the c
 Phone: (780) 435-5300. Public email: dental_appointment@shaw.ca. Booking form delivery: 109dentaloffice@gmail.com.
 
 Use the existing clinic images in assets/photos and original logo in assets/brand-logo.png. See assets/photos/SOURCES.txt. Do not mix Vista or Redwater content, tracking or assets into this repository. Do not invent clinic facts, medical claims or awards. Keep copy direct, with no em dashes.
+
+## Launch preparation
+
+See [launch handoff](docs/LAUNCH.md) for production packaging, validation, migration decisions, and remaining checks. `tools/launch_content.py` holds the supplemental patient copy and primary references. `tools/prepare_release.py` builds and validates an isolated production ZIP without changing the review files.

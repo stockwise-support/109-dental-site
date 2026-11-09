@@ -5,6 +5,8 @@ import argparse
 import json
 import re
 from pathlib import Path
+import hashlib
+from launch_content import EXTRA_PAGES, SERVICE_ADDITIONS, CDCP_FAQS, CDCP_BODY
 
 ROOT = Path(__file__).resolve().parents[1]
 CANON = "https://109dental.ca"
@@ -13,6 +15,8 @@ CANON = "https://109dental.ca"
 # use the current origin + "/". Do not use path-absolute /css URLs.
 GH_PAGES_BASE = "https://stockwise-support.github.io/109-dental-site/"
 PREVIEW = True
+GENERATED_PATHS = []
+SOURCE_ROOT = ROOT
 
 
 def u(path: str) -> str:
@@ -146,6 +150,8 @@ def footer_html() -> str:
         <li><a href="{u('/')}">Home</a></li>
         <li><a href="{u('/about/')}">About</a></li>
         <li><a href="{u('/new-patients/')}">New patients</a></li>
+        <li><a href="{u('/cdcp-insurance/')}">CDCP &amp; insurance</a></li>
+        <li><a href="{u('/blog/')}">Patient guides</a></li>
         <li><a href="{u('/reviews/')}">Reviews</a></li>
         <li><a href="{u('/contact/')}">Contact</a></li>
         <li><a href="{u('/privacy/')}">Privacy</a></li>
@@ -291,7 +297,7 @@ def dentist_schema() -> str:
     {{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday"],"opens":"08:30","closes":"16:30"}},
     {{"@type":"OpeningHoursSpecification","dayOfWeek":["Wednesday","Thursday"],"opens":"07:30","closes":"15:30"}}
   ],
-  "sameAs": ["{FB}", "{IG}", "{MAP_LINK}"],
+  "sameAs": ["{MAP_LINK}"],
   "areaServed": ["Queen Alexandra", "Strathcona", "University of Alberta", "Whyte Avenue", "Edmonton"],
   "isAcceptingNewPatients": true
 }}
@@ -313,6 +319,20 @@ def faq_schema(items: list[tuple[str, str]]) -> str:
             ],
         }
     )
+
+
+def team_schema() -> str:
+    return json.dumps({
+        '@context': 'https://schema.org',
+        '@graph': [
+            {'@type': 'Person', '@id': CANON + '/about/#' + slug,
+             'name': name, 'jobTitle': 'Dentist',
+             'url': CANON + '/about/#' + slug,
+             'image': CANON + '/assets/photos/' + slug + '.webp',
+             'worksFor': {'@id': CANON + '/#clinic'}}
+            for slug, name in [('dr-steve-barkwell', 'Dr. Steve Barkwell'), ('dr-guy-girtel', 'Dr. Guy Girtel')]
+        ]
+    })
 
 
 def service_schema(name: str, url: str, desc: str) -> str:
@@ -370,6 +390,7 @@ def page(
     schemas: list[str],
     extra_head: str = "",
 ) -> None:
+    GENERATED_PATHS.append(path if path.startswith('/') else '/' + path)
     canonical = CANON + "/" + path.lstrip("/")
     if path == "/":
         canonical = CANON + "/"
@@ -419,7 +440,7 @@ def page(
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{u('/css/styles.css')}?v=20260930">
+  <link rel="stylesheet" href="{u('/css/styles.css')}?v={hashlib.sha256((SOURCE_ROOT / 'css/styles.css').read_bytes()).hexdigest()[:12]}">
   {extra_head}
   {schema_tags}
 </head>
@@ -447,7 +468,7 @@ def page(
   </main>
   {footer_html()}
   {sticky_bar()}
-  <script src="{u('/js/main.js')}" defer></script>
+  <script src="{u('/js/main.js')}?v={hashlib.sha256((SOURCE_ROOT / 'js/main.js').read_bytes()).hexdigest()[:12]}" defer></script>
 </body>
 </html>
 """
@@ -561,13 +582,13 @@ def about():
     </section>
     <section class="section section-alt">
       <div class="container two-col">
-        <article class="card team-card">
+        <article class="card team-card" id="dr-steve-barkwell">
           {photo("Dr. Steve Barkwell of 109 Dental", src="/assets/photos/dr-steve-barkwell.webp")}
           <h2>Dr. Steve Barkwell</h2>
           <p>Dr. Barkwell was born in Edmonton and completed biochemistry and dentistry degrees at UBC. He has practised in Alberta for more than 11 years.</p>
           <p>He provides a wide range of general care, including implants, Invisalign, children's dentistry, wisdom teeth, and TMJ-related treatment.</p>
         </article>
-        <article class="card team-card">
+        <article class="card team-card" id="dr-guy-girtel">
           {photo("Dr. Guy Girtel of 109 Dental", src="/assets/photos/dr-guy-girtel.webp")}
           <h2>Dr. Guy Girtel</h2>
           <p>Dr. Girtel has served Edmonton patients for more than 25 years, with a focus on general and family dentistry. Patients often know him from the long-running practice on 109 Street.</p>
@@ -596,7 +617,7 @@ def about():
         "Meet Drs. Steve Barkwell and Guy Girtel at 109 Dental in Queen Alexandra, near the University of Alberta.",
         "/about/",
         body,
-        [dentist_schema(), breadcrumb_schema([("/", "Home"), ("/about/", "About")])],
+        [dentist_schema(), team_schema(), breadcrumb_schema([("/", "Home"), ("/about/", "About")])],
     )
 
 
@@ -735,6 +756,7 @@ def new_patients():
         </div>
         <div>
           <h2>Insurance, CDCP, parking</h2>
+          <p><a href="/cdcp-insurance/">CDCP, coverage, and questions to ask before treatment</a></p>
           <p>We accept most major dental plans and the Canadian Dental Care Plan. We can often direct bill. Coverage still depends on your plan and the treatment recommended.</p>
           <p>Free parking is available at 7125 109 St NW. Transit along 109 Street is a straightforward option if you are coming from campus or Whyte Avenue.</p>
           <p><a href="/contact/">See hours and the Edmonton map</a> or <a href="/services/family-dentistry/">read about family dentistry</a>.</p>
@@ -787,6 +809,7 @@ def services_hub():
         <h1>Dental services in Strathcona</h1>
         <p class="lede">{ENTITY} Find out more about the care we offer, or call if you are unsure where to start.</p>
         <div class="cards">{cards}</div>
+        <p><a href="/blog/">Explore patient guides and other dental questions</a>, including gum care, dentures, jaw discomfort, and preparing for an appointment.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
           <a class="btn btn-secondary" href="/contact/#book">Book an appointment</a>
@@ -821,6 +844,8 @@ def service_page(
     photo_alt: str | None = None,
 ):
     url = f"/services/{slug}/"
+    more += SERVICE_ADDITIONS.get(slug, '')
+    more += '<p><a href="/cdcp-insurance/">CDCP and insurance information</a> · <a href="/about/">Meet the dentists</a></p>'
     related_html = "".join(f'<li><a href="{href}">{label}</a></li>' for href, label in related)
     body = f"""
     <section class="section">
@@ -982,7 +1007,7 @@ def remaining_services():
         <ul class="list">
           <li>Toothache: rinse with warm water, floss gently, use a cold compress on the cheek. Do not put aspirin on the gum.</li>
           <li>Broken tooth: rinse, keep any fragments, and call us.</li>
-          <li>Knocked-out tooth: hold it by the crown, rinse gently, keep it in milk or saliva, and come in as soon as you can.</li>
+          <li>Knocked-out adult tooth: hold it by the crown, keep it moist in milk, and seek dental care immediately. Do not reinsert a baby tooth.</li>
         </ul>
         <p>New patients with an emergency are welcome to call. <a href="/new-patients/">See first-visit notes</a> if you also need to join the practice.</p>
         """,
@@ -1178,16 +1203,7 @@ def legal():
 
 
 def write_support_files():
-    urls = [
-        "/",
-        "/about/",
-        "/contact/",
-        "/new-patients/",
-        "/reviews/",
-        "/services/",
-        "/privacy/",
-        "/accessibility/",
-    ] + [href for href, _ in SERVICES]
+    urls = [p for p in GENERATED_PATHS if p not in ('/404.html', '/thank-you/')]
     urlset = "\n".join(
         f"  <url><loc>{CANON}{u}</loc><changefreq>monthly</changefreq></url>" for u in urls
     )
@@ -1255,10 +1271,62 @@ ErrorDocument 404 /404.html
     print("wrote support files")
 
 
+def launch_pages():
+    path = '/cdcp-insurance/'
+    body = f'''<section class="section"><div class="container narrow">
+    {crumbs([('/', 'Home'), (path, 'CDCP & insurance')])}
+    <p class="kicker">Planning your visit</p><h1>CDCP and dental insurance.</h1>
+    <p class="lede">109 Dental accepts the Canadian Dental Care Plan. Bring your coverage details and ask about your estimated share of the cost before treatment.</p>
+    {CDCP_BODY}<h2>Questions about coverage</h2>{faq_block(CDCP_FAQS)}
+    <p><a class="btn btn-primary" href="/contact/#book">Request a visit</a></p>
+    </div></section>'''
+    page(path, 'CDCP & Dental Insurance in Edmonton | 109 Dental', 'Plan your visit to 109 Dental: CDCP, private insurance, estimates, and what to bring. Call (780) 435-5300 with coverage questions.', path, body, [faq_schema(CDCP_FAQS), breadcrumb_schema([('/', 'Home'), (path, 'CDCP & insurance')])])
+    for item in EXTRA_PAGES:
+        path, title, intro, content, source, source_name, related = item
+        body = f'''<section class="section"><div class="container">
+        {crumbs([('/', 'Home'), ('/blog/', 'Patient guides'), (path, title)])}
+        <p class="kicker">Patient guide</p><h1>{esc(title)}</h1><p class="lede">{intro}</p>
+        </div></section><section class="section section-alt"><div class="container two-col">
+        <div>{content}<h2>Planning a visit to 109 Dental</h2>
+        <p>Call (780) 435-5300 to ask which appointment to book and whether the care you need is available at the clinic. Bring any referral, recent dental records, medication list, and coverage details. An assessment helps determine the next step, including whether a referral is needed.</p>
+        <p><a href="{related}">Related care at 109 Dental</a> · <a href="/cdcp-insurance/">CDCP and insurance</a></p>
+        <p class="form-note">General information, not a personal treatment plan. <a href="{source}">{esc(source_name)}</a>.</p>
+        <a class="btn btn-primary" href="/contact/#book">Request an appointment</a></div>
+        {photo('A treatment room at 109 Dental', src='/assets/photos/operatory.webp')}
+        </div></section>'''
+        page(path, title + ' | 109 Dental Edmonton', intro, path, body, [breadcrumb_schema([('/', 'Home'), ('/blog/', 'Patient guides'), (path, title)])])
+    cards = ''.join(f'<article class="card"><h2><a href="{p}">{esc(t)}</a></h2><p>{i}</p></article>' for p,t,i,*_ in EXTRA_PAGES)
+    page('/blog/', 'Patient Guides & Dental Questions | 109 Dental Edmonton', 'Practical information about dental visits, treatment questions, and planning your care at 109 Dental in Edmonton.', '/blog/', f'<section class="section"><div class="container"><p class="kicker">Before your visit</p><h1>Questions worth asking.</h1><p class="lede">Learn about your options and bring your questions to the appointment. Your dentist can explain what applies to you.</p><div class="cards">{cards}</div></div></section>', [breadcrumb_schema([('/', 'Home'), ('/blog/', 'Patient guides')])])
+
+
+def write_migration():
+    migration = json.loads((SOURCE_ROOT / 'tools/migration.json').read_text(encoding='utf-8'))
+    rules = []
+    for row in migration:
+        if row['from'] != row['to']:
+            pattern = re.escape(row['from'].strip('/'))
+            rules.append(f"RewriteRule ^{pattern}/?$ {row['to']} [R=301,L,NE]")
+    path = ROOT / '.htaccess'
+    config = path.read_text(encoding='utf-8')
+    config = config.replace('RewriteEngine On', 'RewriteEngine On\n\n# Preserve old website URLs. Exact matches only; no homepage catch-all.\n' + '\n'.join(rules), 1)
+    if not PREVIEW:
+        config = config.replace('RewriteEngine On', 'RewriteEngine On\n# Canonical host, only for the approved production domain.\nRewriteCond %{HTTP_HOST} ^www\\.109dental\\.ca$ [NC]\nRewriteRule ^ https://109dental.ca%{REQUEST_URI} [R=301,L]', 1)
+    config = config.replace('  Header set X-Content-Type-Options', '  <FilesMatch "\\.html$">\n    Header set Cache-Control "no-cache"\n  </FilesMatch>\n  Header set X-Content-Type-Options')
+    path.write_text(config, encoding='utf-8')
+    (ROOT / 'build-manifest.json').write_text(json.dumps({'mode': 'preview' if PREVIEW else 'production', 'pages': GENERATED_PATHS}, indent=2), encoding='utf-8')
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--production", action="store_true", help="Remove preview banner and allow indexing; use only for an approved launch.")
+    parser.add_argument('--output-dir', type=Path, help='Build into a separate directory, leaving the review build intact.')
     args = parser.parse_args()
+    if args.output_dir:
+        import shutil
+        ROOT = args.output_dir.resolve()
+        ROOT.mkdir(parents=True, exist_ok=True)
+        for folder in ('assets', 'css', 'js'):
+            shutil.copytree(SOURCE_ROOT / folder, ROOT / folder, dirs_exist_ok=True)
     PREVIEW = not args.production
     home()
     about()
@@ -1268,5 +1336,7 @@ if __name__ == "__main__":
     services_hub()
     wisdom()
     remaining_services()
+    launch_pages()
     legal()
     write_support_files()
+    write_migration()

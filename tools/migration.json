@@ -1,0 +1,212 @@
+[
+  {
+    "from": "/",
+    "to": "/",
+    "action": "retain"
+  },
+  {
+    "from": "/how-to-handle-dental-emergencies-in-the-family/",
+    "to": "/how-to-handle-dental-emergencies-in-the-family/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/",
+    "to": "/services/",
+    "action": "retain"
+  },
+  {
+    "from": "/how-do-i-care-for-my-invisalign-aligners/",
+    "to": "/how-do-i-care-for-my-invisalign-aligners/",
+    "action": "retain"
+  },
+  {
+    "from": "/can-i-get-dental-implants-if-i-have-bone-loss/",
+    "to": "/can-i-get-dental-implants-if-i-have-bone-loss/",
+    "action": "retain"
+  },
+  {
+    "from": "/pros-and-cons-of-dental-bridges-is-this-the-right-solution-for-your-missing-teeth/",
+    "to": "/pros-and-cons-of-dental-bridges-is-this-the-right-solution-for-your-missing-teeth/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/dental-checkups/",
+    "to": "/services/family-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/frenulopasty-and-frenectomy/",
+    "to": "/services/frenulopasty-and-frenectomy/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/gum-grafting/",
+    "to": "/services/gum-grafting/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/dental-veneers/",
+    "to": "/services/cosmetic-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/dentures/",
+    "to": "/services/dentures/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/infant-frenectomies/",
+    "to": "/services/frenulopasty-and-frenectomy/",
+    "action": "301"
+  },
+  {
+    "from": "/services/disclusion-time-reduction-therapy/",
+    "to": "/services/tmj-tmd-therapy/",
+    "action": "301"
+  },
+  {
+    "from": "/services/myobrace/",
+    "to": "/services/jaw-development-therapy/",
+    "action": "301"
+  },
+  {
+    "from": "/services/laser-gum-contouring/",
+    "to": "/services/cosmetic-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/teeth-cleaning/",
+    "to": "/services/family-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/neuromuscular-tmj-therapy/",
+    "to": "/services/tmj-tmd-therapy/",
+    "action": "301"
+  },
+  {
+    "from": "/services/sleep-dentistry/",
+    "to": "/services/sleep-dentistry/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/vivos/",
+    "to": "/services/sleep-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/periodontal-disease-therapy/",
+    "to": "/services/periodontal-disease-therapy/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/tmj-tmd-therapy/",
+    "to": "/services/tmj-tmd-therapy/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/gum-lift-procedure/",
+    "to": "/services/cosmetic-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/wisdom-teeth/",
+    "to": "/services/wisdom-teeth/",
+    "action": "retain"
+  },
+  {
+    "from": "/blog/",
+    "to": "/blog/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/dental-crowns/",
+    "to": "/services/crowns-bridges/",
+    "action": "301"
+  },
+  {
+    "from": "/services/dental-fillings-and-bonding/",
+    "to": "/services/family-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/cosmetic-dentistry/",
+    "to": "/services/cosmetic-dentistry/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/itero-dental/",
+    "to": "/services/itero-dental/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/family-dentist/",
+    "to": "/services/family-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/dental-bonding/",
+    "to": "/services/cosmetic-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/dental-bridges/",
+    "to": "/services/crowns-bridges/",
+    "action": "301"
+  },
+  {
+    "from": "/services/dental-braces/",
+    "to": "/services/orthodontics-invisalign/",
+    "action": "301"
+  },
+  {
+    "from": "/services/root-canal-treatment/",
+    "to": "/services/root-canals/",
+    "action": "301"
+  },
+  {
+    "from": "/services/teeth-whitening/",
+    "to": "/services/cosmetic-dentistry/",
+    "action": "301"
+  },
+  {
+    "from": "/services/dental-implants/",
+    "to": "/services/dental-implants/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/invisalign/",
+    "to": "/services/orthodontics-invisalign/",
+    "action": "301"
+  },
+  {
+    "from": "/services/jaw-development-therapy/",
+    "to": "/services/jaw-development-therapy/",
+    "action": "retain"
+  },
+  {
+    "from": "/contact-us/",
+    "to": "/contact/",
+    "action": "301"
+  },
+  {
+    "from": "/about-us/",
+    "to": "/about/",
+    "action": "301"
+  },
+  {
+    "from": "/cdcp-eligibility-co-pay-calculator-109-dental-edmonton/",
+    "to": "/cdcp-insurance/",
+    "action": "301"
+  },
+  {
+    "from": "/services/bone-augmentation-and-grafting/",
+    "to": "/services/bone-augmentation-and-grafting/",
+    "action": "retain"
+  },
+  {
+    "from": "/services/emergency-dental/",
+    "to": "/services/emergency-dentist/",
+    "action": "301"
+  }
+]

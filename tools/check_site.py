@@ -1,10 +1,18 @@
 """Check generated links, booking anchors, schema, and review-build safeguards."""
 import json
+import argparse
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
+SOURCE_ROOT = ROOT
+parser = argparse.ArgumentParser()
+parser.add_argument('--root', type=Path, default=ROOT)
+parser.add_argument('--production', action='store_true')
+args = parser.parse_args()
+ROOT = args.root.resolve()
 PUBLIC_EMAIL = "dental_appointment@shaw.ca"
 BOOKING_EMAIL = "109dentaloffice@gmail.com"
 FORM_ACTION = f"https://formsubmit.co/{BOOKING_EMAIL}"
@@ -91,7 +99,9 @@ class Page(HTMLParser):
 
 
 pages = {p.resolve(): Page(p) for p in ROOT.rglob("*.html") if ".git" not in p.parts}
-assert len(pages) == 19, "Unexpected generated page count"
+manifest = json.loads((ROOT / 'build-manifest.json').read_text(encoding='utf-8'))
+assert manifest['mode'] == ('production' if args.production else 'preview')
+assert len(pages) == len(manifest['pages']) == 34, "Unexpected generated page count"
 faq_count = 0
 form_count = 0
 dentist_email_count = 0
@@ -102,9 +112,11 @@ for path in ROOT.rglob("*"):
     assert OLD_FORM_ACTION not in path.read_text(encoding="utf-8"), f"Old Shaw form action: {path}"
 for path, page in pages.items():
     assert page.h1 == 1, f"Expected one H1: {path}"
-    assert page.robots == "noindex, follow", f"Review page is indexable: {path}"
+    utility = path.relative_to(ROOT).as_posix() in ('404.html', 'thank-you/index.html')
+    expected_robots = 'noindex, follow' if utility or not args.production else None
+    assert page.robots == expected_robots, f"Wrong indexing mode: {path}"
     html = path.read_text(encoding="utf-8")
-    for unwanted in ("Photo placeholder:", "Bios should be confirmed", "Placeholder for approved", "—", "Vista Dental", "Redwater Dental"):
+    for unwanted in ("Photo placeholder:", "Bios should be confirmed", "Placeholder for approved", "—", "Vista Dental", "Redwater Dental", "Formerly Dr.", "Previously known as"):
         assert unwanted not in html, f"Unwanted public copy: {path}: {unwanted}"
     for url in page.links:
         parsed = urlsplit(url)
@@ -172,4 +184,23 @@ assert dentist_email_count == 3, f"Expected JSON-LD email on home, about, and co
 assert "/thank-you/" not in (ROOT / "sitemap.xml").read_text()
 assert "https://109dental.ca/404.html" in (ROOT / "404.html").read_text()
 assert "CDCP does not cover dental implants" in (ROOT / "services/dental-implants/index.html").read_text()
+titles = [re.search(r'<title>(.*?)</title>', p.read_text(encoding='utf-8')).group(1) for p in pages]
+assert len(titles) == len(set(titles)), 'Duplicate titles'
+migration = json.loads((SOURCE_ROOT / 'tools/migration.json').read_text(encoding='utf-8'))
+assert len(migration) == 42
+config = (ROOT / '.htaccess').read_text(encoding='utf-8')
+for row in migration:
+    target = ROOT / row['to'].strip('/') / 'index.html'
+    assert target.exists(), f"Missing migration destination: {row}"
+    if row['from'] != row['to']:
+        assert row['to'] not in [r['from'] for r in migration if r['from'] != r['to']], f'Redirect chain: {row}'
+        rule = f"RewriteRule ^{re.escape(row['from'].strip('/'))}/?$ {row['to']} [R=301,L,NE]"
+        assert rule in config, f'Missing redirect: {row}'
+        assert row['from'] not in manifest['pages'], f'Redirect shadows content: {row}'
+from xml.etree import ElementTree as ET
+sitemap = ET.parse(ROOT / 'sitemap.xml')
+urls = [node.text for node in sitemap.findall('.//{*}loc')]
+assert len(urls) == len(set(urls)) == 32
+assert set(urls) == {'https://109dental.ca' + p for p in manifest['pages'] if p not in ('/404.html', '/thank-you/')}
+print('PASS: 42 legacy URLs accounted for; 23 exact redirects; unique titles; sitemap; build-mode checks.')
 print(f"PASS: {len(pages)} pages; {form_count} booking forms to {BOOKING_EMAIL}; public email {PUBLIC_EMAIL}; Friday 9:00 AM to 3:00 PM; {faq_count} matching FAQs; no Shaw form action.")
