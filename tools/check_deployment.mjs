@@ -15,6 +15,8 @@ for (let offset = 0; offset < manifest.pages.length; offset += 4) {
     const response = await fetch(new URL(path, origin), {signal:AbortSignal.timeout(20000)});
     assert(response.status === 200 || (path === '/404.html' && response.status === 404), `HTTP ${response.status}`);
     const html = await response.text();
+    assert(!html.includes('Parked Domain'), 'hosting is returning a parked-domain page');
+    if (production && !['/404.html','/thank-you/'].includes(path)) assert(!/noindex/i.test(response.headers.get('x-robots-tag') || ''), 'HTTP header prevents indexing');
     const expected = !production || ['/404.html','/thank-you/'].includes(path);
     assert(/<meta name="robots" content="noindex, follow">/.test(html) === expected, 'wrong indexing mode');
     assert(html.includes(`href="https://109dental.ca${path}"`), 'wrong canonical');
@@ -36,6 +38,10 @@ const assetPaths = ['css/styles.css','js/main.js','assets/brand-logo.png', ...fs
 await Promise.all(assetPaths.map(path=>check(path,async()=>{
   const response = await fetch(new URL(path,origin), {signal:AbortSignal.timeout(20000)});
   assert.equal(response.status,200);
+  assert(!/text\/html/i.test(response.headers.get('content-type') || ''), 'asset URL returned HTML, possibly a hosting placeholder');
+  const content = Buffer.from(await response.arrayBuffer());
+  const local = fs.readFileSync(new URL('../' + path, import.meta.url));
+  assert(content.equals(local), 'deployed asset does not match release');
 })));
 await check('unknown URL', async()=>{
   const response = await fetch(new URL('/launch-check-does-not-exist/',origin),{signal:AbortSignal.timeout(20000)});

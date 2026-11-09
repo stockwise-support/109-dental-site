@@ -2,6 +2,12 @@
 
 Prepared November 8, 2026. Main domain and DNS have not been changed.
 
+## Hosting blocker found during verification
+
+The review update was pushed to the existing Hostinger deployment branch, but the temporary hostname could not be verified: page and redirect requests returned connection resets, while the stylesheet URL returned an HTML page titled "Parked Domain name on Hostinger DNS system". A 200 response alone is not proof of a working deployment. Robots.txt still responds with the Hostinger Googlebot block. Similar page-fetch failures occurred during research before this deployment.
+
+The Hostinger website/domain assignment and Git deployment connection need to be checked in the hosting account before launch. Do not describe the new preview as live until the deployment check and visual checks pass. Local preview browser navigation also timed out in this session, so a fresh desktop/mobile visual review of these additions remains open. Automated HTML, asset-reference, FAQ, form-configuration, migration, and production-build checks passed locally.
+
 ## Ready in this branch
 
 - 34 pages, with the existing clinic photos and logo.

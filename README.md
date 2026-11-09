@@ -77,3 +77,5 @@ Use the existing clinic images in assets/photos and original logo in assets/bran
 ## Launch preparation
 
 See [launch handoff](docs/LAUNCH.md) for production packaging, validation, migration decisions, and remaining checks. `tools/launch_content.py` holds the supplemental patient copy and primary references. `tools/prepare_release.py` builds and validates an isolated production ZIP without changing the review files.
+
+November 8 hosting verification is blocked: the temporary hostname returns connection errors and a parked-domain HTML response at its stylesheet URL. Code is pushed, but the latest preview deployment has not been verified. Check the Hostinger website/domain assignment and Git connection before cutover.
