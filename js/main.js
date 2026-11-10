@@ -13,6 +13,7 @@
   if (toggle && nav) {
     function closeMenu() {
       nav.classList.remove("is-open");
+      document.body.classList.remove("nav-open");
       toggle.setAttribute("aria-expanded", "false");
     }
     toggle.addEventListener("click", function () {
@@ -58,26 +59,6 @@
     return window.location.origin + "/";
   }
 
-  var params = new URLSearchParams(window.location.search);
-  var campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-  var reasonSelect = form && form.querySelector("[name='reason']");
-  if (reasonSelect && Array.from(reasonSelect.options).some(function (option) { return option.value === params.get("reason"); })) {
-    reasonSelect.value = params.get("reason");
-  }
-  // Keep attribution in same-site links without storing visitor data.
-  document.querySelectorAll("a[href]").forEach(function (link) {
-    var url = new URL(link.href);
-    if (url.origin !== window.location.origin || !url.pathname.startsWith(new URL(siteBase()).pathname)) return;
-    campaignKeys.forEach(function (key) {
-      if (params.has(key)) url.searchParams.set(key, params.get(key));
-    });
-    if (url.pathname.endsWith("/contact/") && url.hash === "#book") {
-      var reason = form && form.querySelector("[name='reason']");
-      if (reason) url.searchParams.set("reason", reason.value);
-    }
-    link.href = url.href;
-  });
-
   if (form) {
     var nextField = form.querySelector("[name='_next']");
     if (nextField) {
@@ -86,15 +67,9 @@
 
     var pageField = form.querySelector("[name='page']");
     if (pageField) {
-      pageField.value = window.location.href;
+      pageField.value = window.location.origin + window.location.pathname;
     }
 
-    campaignKeys.forEach(function (key) {
-      var input = form.querySelector("[name='" + key + "']");
-      if (input && params.get(key)) {
-        input.value = params.get(key);
-      }
-    });
 
   }
 })();

@@ -87,3 +87,11 @@ EXTRA_PAGES = [
  '''<h2>Know what your appointment includes</h2><p>When booking an aligner or restorative consultation, ask which records are needed and whether existing records can be transferred. Confirm whether a scan, photographs, or x-rays are included in the estimate.</p><h2>Questions about iTero</h2><p>If you were referred for an iTero scan, tell the office the purpose of the referral and confirm current equipment availability before booking. A scan or image should be interpreted as part of a full assessment, not as a treatment promise.</p><h2>Understand the proposed result</h2><p>Ask the dentist to explain any visual treatment simulation, its limitations, and which decisions still depend on examining your teeth and bite.</p>''',
  'https://www.mouthhealthy.org/all-topics-a-z/braces', 'ADA: supervised orthodontic treatment', '/services/orthodontics-invisalign/'),
 ]
+
+
+# Link broad service overviews to distinct patient questions, preserving their URLs.
+SERVICE_ADDITIONS['family-dentistry'] += '<h2>Plan your routine care</h2><p>Read about <a href="/services/dental-checkups/">dental checkups</a>, <a href="/services/teeth-cleaning/">cleaning visits</a> and <a href="/services/dental-fillings-and-bonding/">fillings and bonding</a>.</p>'
+SERVICE_ADDITIONS['cosmetic-dentistry'] += '<h2>Compare your options</h2><p>Learn about <a href="/services/teeth-whitening/">whitening</a>, <a href="/services/dental-veneers/">veneers</a>, <a href="/services/dental-fillings-and-bonding/">bonding</a> and <a href="/services/gum-lift-procedure/">gum contouring</a>.</p>'
+SERVICE_ADDITIONS['crowns-bridges'] += '<h2>Which problem are you looking to address?</h2><p>A <a href="/services/dental-crowns/">crown restores an existing tooth</a>; a <a href="/services/dental-bridges/">bridge replaces missing teeth</a>. Each has different preparation, cleaning and cost considerations.</p>'
+SERVICE_ADDITIONS['orthodontics-invisalign'] += '<p>Considering fixed appliances? Read our <a href="/services/dental-braces/">braces and orthodontic choices guide</a>.</p>'
+SERVICE_ADDITIONS['childrens-dentistry'] += '<p>For babies with feeding difficulties, read about <a href="/services/infant-frenectomies/">infant tongue-tie assessment</a> and discuss the concern with your baby’s medical provider.</p>'

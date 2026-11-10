@@ -31,8 +31,8 @@
   },
   {
     "from": "/services/dental-checkups/",
-    "to": "/services/family-dentistry/",
-    "action": "301"
+    "to": "/services/dental-checkups/",
+    "action": "retain"
   },
   {
     "from": "/services/frenulopasty-and-frenectomy/",
@@ -46,8 +46,8 @@
   },
   {
     "from": "/services/dental-veneers/",
-    "to": "/services/cosmetic-dentistry/",
-    "action": "301"
+    "to": "/services/dental-veneers/",
+    "action": "retain"
   },
   {
     "from": "/services/dentures/",
@@ -56,8 +56,8 @@
   },
   {
     "from": "/services/infant-frenectomies/",
-    "to": "/services/frenulopasty-and-frenectomy/",
-    "action": "301"
+    "to": "/services/infant-frenectomies/",
+    "action": "retain"
   },
   {
     "from": "/services/disclusion-time-reduction-therapy/",
@@ -71,13 +71,13 @@
   },
   {
     "from": "/services/laser-gum-contouring/",
-    "to": "/services/cosmetic-dentistry/",
+    "to": "/services/gum-lift-procedure/",
     "action": "301"
   },
   {
     "from": "/services/teeth-cleaning/",
-    "to": "/services/family-dentistry/",
-    "action": "301"
+    "to": "/services/teeth-cleaning/",
+    "action": "retain"
   },
   {
     "from": "/services/neuromuscular-tmj-therapy/",
@@ -106,8 +106,8 @@
   },
   {
     "from": "/services/gum-lift-procedure/",
-    "to": "/services/cosmetic-dentistry/",
-    "action": "301"
+    "to": "/services/gum-lift-procedure/",
+    "action": "retain"
   },
   {
     "from": "/services/wisdom-teeth/",
@@ -121,13 +121,13 @@
   },
   {
     "from": "/services/dental-crowns/",
-    "to": "/services/crowns-bridges/",
-    "action": "301"
+    "to": "/services/dental-crowns/",
+    "action": "retain"
   },
   {
     "from": "/services/dental-fillings-and-bonding/",
-    "to": "/services/family-dentistry/",
-    "action": "301"
+    "to": "/services/dental-fillings-and-bonding/",
+    "action": "retain"
   },
   {
     "from": "/services/cosmetic-dentistry/",
@@ -146,18 +146,18 @@
   },
   {
     "from": "/services/dental-bonding/",
-    "to": "/services/cosmetic-dentistry/",
+    "to": "/services/dental-fillings-and-bonding/",
     "action": "301"
   },
   {
     "from": "/services/dental-bridges/",
-    "to": "/services/crowns-bridges/",
-    "action": "301"
+    "to": "/services/dental-bridges/",
+    "action": "retain"
   },
   {
     "from": "/services/dental-braces/",
-    "to": "/services/orthodontics-invisalign/",
-    "action": "301"
+    "to": "/services/dental-braces/",
+    "action": "retain"
   },
   {
     "from": "/services/root-canal-treatment/",
@@ -166,8 +166,8 @@
   },
   {
     "from": "/services/teeth-whitening/",
-    "to": "/services/cosmetic-dentistry/",
-    "action": "301"
+    "to": "/services/teeth-whitening/",
+    "action": "retain"
   },
   {
     "from": "/services/dental-implants/",

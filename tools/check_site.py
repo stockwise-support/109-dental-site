@@ -23,11 +23,6 @@ BOOKING_FIELDS = {
     "_captcha": "false",
     "_next": "https://109dental.ca/thank-you/",
     "page": "",
-    "utm_source": "",
-    "utm_medium": "",
-    "utm_campaign": "",
-    "utm_content": "",
-    "utm_term": "",
     "_honey": None,
     "name": None,
     "phone": None,
@@ -101,7 +96,7 @@ class Page(HTMLParser):
 pages = {p.resolve(): Page(p) for p in ROOT.rglob("*.html") if ".git" not in p.parts}
 manifest = json.loads((ROOT / 'build-manifest.json').read_text(encoding='utf-8'))
 assert manifest['mode'] == ('production' if args.production else 'preview')
-assert len(pages) == len(manifest['pages']) == 34, "Unexpected generated page count"
+assert len(pages) == len(manifest['pages']) == 44, "Unexpected generated page count"
 faq_count = 0
 form_count = 0
 dentist_email_count = 0
@@ -116,7 +111,7 @@ for path, page in pages.items():
     expected_robots = 'noindex, follow' if utility or not args.production else None
     assert page.robots == expected_robots, f"Wrong indexing mode: {path}"
     html = path.read_text(encoding="utf-8")
-    for unwanted in ("Photo placeholder:", "Bios should be confirmed", "Placeholder for approved", "—", "Vista Dental", "Redwater Dental", "Formerly Dr.", "Previously known as"):
+    for unwanted in ("Photo placeholder:", "Bios should be confirmed", "Placeholder for approved", "â€”", "Vista Dental", "Redwater Dental", "Formerly Dr.", "Previously known as"):
         assert unwanted not in html, f"Unwanted public copy: {path}: {unwanted}"
     for url in page.links:
         parsed = urlsplit(url)
@@ -200,7 +195,7 @@ for row in migration:
 from xml.etree import ElementTree as ET
 sitemap = ET.parse(ROOT / 'sitemap.xml')
 urls = [node.text for node in sitemap.findall('.//{*}loc')]
-assert len(urls) == len(set(urls)) == 32
+assert len(urls) == len(set(urls)) == 42
 assert set(urls) == {'https://109dental.ca' + p for p in manifest['pages'] if p not in ('/404.html', '/thank-you/')}
-print('PASS: 42 legacy URLs accounted for; 23 exact redirects; unique titles; sitemap; build-mode checks.')
+print('PASS: 42 legacy URLs accounted for; 13 exact redirects; unique titles; sitemap; build-mode checks.')
 print(f"PASS: {len(pages)} pages; {form_count} booking forms to {BOOKING_EMAIL}; public email {PUBLIC_EMAIL}; Friday 9:00 AM to 3:00 PM; {faq_count} matching FAQs; no Shaw form action.")

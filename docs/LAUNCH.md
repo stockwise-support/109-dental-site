@@ -1,6 +1,6 @@
 # 109 Dental launch handoff
 
-Prepared November 8, 2026. Main domain and DNS have not been changed.
+Updated November 10, 2026. Main domain and DNS have not been changed.
 
 ## Hosting blocker found during verification
 
@@ -10,11 +10,11 @@ The Hostinger website/domain assignment and Git deployment connection need to be
 
 ## Ready in this branch
 
-- 34 pages, with the existing clinic photos and logo.
+- 44 pages, with the existing clinic photos and logo.
 - Dedicated CDCP/insurance page, four updated patient guides at their existing URLs, and nine additional dental-topic pages preserving old search intent.
 - More practical content on the priority service pages and links between guides, services, insurance, and booking.
 - Dentist identity data connected to the clinic. Unverified Facebook and Instagram URLs removed from schema.
-- All 42 URLs from the production page/post sitemaps checked November 8 are accounted for: 19 retained, 23 exact permanent redirects. Mapping: `tools/migration.json`.
+- All 42 URLs from the production page/post sitemaps checked November 8 are accounted for: 29 retained, 13 exact permanent redirects. Mapping: `tools/migration.json`.
 - Booking destination incorporates the November 5 branch: 109dentaloffice@gmail.com. Public contact email stays dental_appointment@shaw.ca.
 - Separate, tested production packaging; default generated pages remain a noindex review build.
 
@@ -48,7 +48,7 @@ After deployment:
 node tools/check_deployment.mjs https://109dental.ca --production
 ```
 
-This checks pages, indexing markers, canonical URLs, booking destination, all 23 redirects (including preserved campaign parameters), images/assets, robots, and a true 404. It never submits forms. Also check the site visually on a phone and desktop, verify real inbox delivery with permission, and inspect the main URLs in Search Console and Bing Webmaster Tools. Submit https://109dental.ca/sitemap.xml through the authorized accounts.
+This checks pages, indexing markers, canonical URLs, booking destination, all 13 redirects (including preserved campaign parameters), images/assets, robots, and a true 404. It never submits forms. Also check the site visually on a phone and desktop, verify real inbox delivery with permission, and inspect the main URLs in Search Console and Bing Webmaster Tools. Submit https://109dental.ca/sitemap.xml through the authorized accounts.
 
 ## Content and migration notes
 
@@ -63,3 +63,20 @@ Sources are linked on the patient pages: Health Canada for CDCP, ADA/MouthHealth
 Track calls and appointment requests alongside visibility. No analytics account IDs, pixels, cookies, or call-tracking numbers were invented. Account access is needed for Search Console, Bing Webmaster Tools, analytics, Google Business Profile, Apple Maps, and listing changes. No listings were edited and no reviews, outreach, or emails were sent.
 
 For a listing audit, use: 109 Dental; Suite 204, 7125 109 St NW, Edmonton AB T6G 1B9; (780) 435-5300; https://109dental.ca/. Verify operating hours and the public email with the clinic before bulk updates. Prioritize actual conflicts and duplicates over buying a large directory package.
+
+## November 10 audit implementation
+
+Ten distinct service URLs now have their own patient guides: checkups, cleaning, fillings/bonding, crowns, bridges, whitening, veneers, braces, gum contouring and infant feeding/tongue-tie assessment. The migration map has six content consolidations and seven URL renames; no page is pruned without a destination. All service guides are linked from Services, with contextual links from related overview pages.
+
+Location wording identifies Queen Alexandra and describes Strathcona as nearby. Appointment requests explicitly require office confirmation. Form attribution fields and URL query forwarding were removed. Escape and outside-click now restore scrolling after closing the mobile menu. Existing photos are unchanged. Patient explanations include preparation, alternatives, estimates, insurance limitations and aftercare without invented prices or guarantees.
+
+Verification: run `python tools/check_site.py`, `node tools/check_base_paths.mjs`, `node tools/check_interactions.mjs` and the isolated production release check. Local browser navigation to port 8110 timed out on November 10, so visual desktop/mobile review remains unverified.
+
+### Clinic and account follow-up
+
+- Confirm Friday hours before updating visible hours, schema or external listings; existing sources disagree.
+- Confirm clinician names, roles, current service availability, referral arrangements and clinical copy. Do not claim a clinician has reviewed these additions yet.
+- Confirm the booking inbox and FormSubmit activation with an approved delivery test; no form has been submitted as part of this update.
+- Resolve Hostinger's parked-domain/connection problem and verify the actual deployed pages, redirects, assets and crawl settings before launch.
+- Reconcile Google Business Profile, Bing Places, Apple Business Connect and verified directory entries against clinic-confirmed details. Do not manufacture reviews, memberships or social accounts.
+- Once live, submit the production sitemap through the clinic's Search Console and Bing accounts and establish a baseline from real data. No ranking or AI-recommendation improvement is claimed without measurement.

@@ -2,25 +2,7 @@
 <html lang="en-CA">
 <head>
   <meta charset="utf-8">
-  <base href="https://stockwise-support.github.io/109-dental-site/" data-gh-pages-base>
-  <script>
-    (function () {
-      var base = document.querySelector("base[data-gh-pages-base]");
-      if (!base) return;
-      var host = location.hostname;
-      var path = location.pathname || "/";
-      if (host === "localhost" || host === "127.0.0.1") {
-        base.href = location.origin + "/";
-        return;
-      }
-      var project = path.split("/")[1];
-      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {
-        base.href = location.origin + "/" + project + "/";
-        return;
-      }
-      base.href = location.origin + "/";
-    })();
-  </script>
+  <base href="../">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Planning for a family dental emergency | 109 Dental Edmonton</title>
   <meta name="description" content="Know who to call, what information to have ready, and when an appointment request cannot wait.">
@@ -78,7 +60,7 @@
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-primary" href="contact/#book">Request a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -148,6 +130,6 @@
   <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
-  <script src="js/main.js?v=843e05b06a4c" defer></script>
+  <script src="js/main.js?v=ab9144eb0938" defer></script>
 </body>
 </html>

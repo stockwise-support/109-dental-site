@@ -2,25 +2,7 @@
 <html lang="en-CA">
 <head>
   <meta charset="utf-8">
-  <base href="https://stockwise-support.github.io/109-dental-site/" data-gh-pages-base>
-  <script>
-    (function () {
-      var base = document.querySelector("base[data-gh-pages-base]");
-      if (!base) return;
-      var host = location.hostname;
-      var path = location.pathname || "/";
-      if (host === "localhost" || host === "127.0.0.1") {
-        base.href = location.origin + "/";
-        return;
-      }
-      var project = path.split("/")[1];
-      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {
-        base.href = location.origin + "/" + project + "/";
-        return;
-      }
-      base.href = location.origin + "/";
-    })();
-  </script>
+  <base href="./">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Family Dentist on 109 Street, Edmonton | 109 Dental</title>
   <meta name="description" content="Family dental care in Queen Alexandra, near Strathcona and the University of Alberta. Call 109 Dental at (780) 435-5300 to book a visit.">
@@ -108,7 +90,7 @@
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-primary" href="contact/#book">Book a visit <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-primary" href="contact/#book">Request a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -207,11 +189,6 @@
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_next" value="https://109dental.ca/thank-you/">
   <input type="hidden" name="page" value="">
-  <input type="hidden" name="utm_source" value="">
-  <input type="hidden" name="utm_medium" value="">
-  <input type="hidden" name="utm_campaign" value="">
-  <input type="hidden" name="utm_content" value="">
-  <input type="hidden" name="utm_term" value="">
   <div class="hp" aria-hidden="true"><label for="website">Website</label>
   <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
   <label for="name">Name</label>
@@ -289,6 +266,6 @@
   <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
-  <script src="js/main.js?v=843e05b06a4c" defer></script>
+  <script src="js/main.js?v=ab9144eb0938" defer></script>
 </body>
 </html>

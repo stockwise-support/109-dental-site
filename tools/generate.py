@@ -7,13 +7,11 @@ import re
 from pathlib import Path
 import hashlib
 from launch_content import EXTRA_PAGES, SERVICE_ADDITIONS, CDCP_FAQS, CDCP_BODY
+from audit_content import RETAINED_PAGES
+EXTRA_PAGES = EXTRA_PAGES + RETAINED_PAGES
 
 ROOT = Path(__file__).resolve().parents[1]
 CANON = "https://109dental.ca"
-# Fallback <base> for GitHub Pages. An inline script then rewrites it:
-# GH Pages (/109-dental-site/) keeps this prefix; Vercel/Hostinger/localhost
-# use the current origin + "/". Do not use path-absolute /css URLs.
-GH_PAGES_BASE = "https://stockwise-support.github.io/109-dental-site/"
 PREVIEW = True
 GENERATED_PATHS = []
 SOURCE_ROOT = ROOT
@@ -199,11 +197,6 @@ def booking_form(default_reason: str = "other", heading: str = "Request an appoi
   <input type="hidden" name="_captcha" value="false">
   <input type="hidden" name="_next" value="{CANON}/thank-you/">
   <input type="hidden" name="page" value="">
-  <input type="hidden" name="utm_source" value="">
-  <input type="hidden" name="utm_medium" value="">
-  <input type="hidden" name="utm_campaign" value="">
-  <input type="hidden" name="utm_content" value="">
-  <input type="hidden" name="utm_term" value="">
   <div class="hp" aria-hidden="true"><label for="website">Website</label>
   <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
   <label for="name">Name</label>
@@ -390,6 +383,9 @@ def page(
     schemas: list[str],
     extra_head: str = "",
 ) -> None:
+    base_href = "../" * len(path.strip("/").split("/")) if path not in ("/", "404.html") else "./"
+    if path == "404.html":
+        base_href = "/"
     GENERATED_PATHS.append(path if path.startswith('/') else '/' + path)
     canonical = CANON + "/" + path.lstrip("/")
     if path == "/":
@@ -405,25 +401,7 @@ def page(
 <html lang="en-CA">
 <head>
   <meta charset="utf-8">
-  <base href="{GH_PAGES_BASE}" data-gh-pages-base>
-  <script>
-    (function () {{
-      var base = document.querySelector("base[data-gh-pages-base]");
-      if (!base) return;
-      var host = location.hostname;
-      var path = location.pathname || "/";
-      if (host === "localhost" || host === "127.0.0.1") {{
-        base.href = location.origin + "/";
-        return;
-      }}
-      var project = path.split("/")[1];
-      if (host.endsWith(".github.io") && (project === "109-dental-site" || project === "109-dental-review")) {{
-        base.href = location.origin + "/" + project + "/";
-        return;
-      }}
-      base.href = location.origin + "/";
-    }})();
-  </script>
+  <base href="{base_href}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}">
@@ -458,7 +436,7 @@ def page(
       <a class="logo" href="{u('/')}"><img src="{u('/assets/brand-logo.png')}" width="190" height="72" alt="109 Dental"></a>
       {nav_html(current)}
       <div class="header-cta">
-        <a class="btn btn-primary" href="{u('/contact/#book')}">Book a visit <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-primary" href="{u('/contact/#book')}">Request a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -624,7 +602,7 @@ def about():
 CONTACT_FAQS = [
     (
         "Where is 109 Dental?",
-        "Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9, in Queen Alexandra / Strathcona near the University of Alberta and Whyte Avenue.",
+        "Suite 204, 7125 109 St NW, Edmonton, AB T6G 1B9, in Queen Alexandra near the University of Alberta and Whyte Avenue.",
     ),
     (
         "What are your hours?",
@@ -643,7 +621,7 @@ def contact():
       <div class="container">
         {crumbs([("/", "Home"), ("/contact/", "Contact")])}
         <p class="kicker">Edmonton clinic</p>
-        <h1>Contact 109 Dental in Strathcona</h1>
+        <h1>Contact 109 Dental in Edmonton</h1>
         <p class="lede">Call, email, or send an appointment request. Find us at Suite 204, 7125 109 Street NW in Edmonton, near Strathcona and the University of Alberta.</p>
       </div>
     </section>
@@ -695,8 +673,8 @@ def contact():
     """
     page(
         "/contact/",
-        "Contact 109 Dental | Strathcona / Queen Alexandra",
-        "Call (780) 435-5300 or book at Suite 204, 7125 109 St NW, Edmonton. Map, hours, parking, and transit for our Strathcona clinic.",
+        "Contact 109 Dental | Queen Alexandra",
+        "Call (780) 435-5300 or book at Suite 204, 7125 109 St NW, Edmonton. Map, hours, parking, and transit for our Queen Alexandra clinic.",
         "/contact/",
         body,
         [dentist_schema(), faq_schema(CONTACT_FAQS), breadcrumb_schema([("/", "Home"), ("/contact/", "Contact")])],
@@ -775,7 +753,7 @@ def new_patients():
     """
     page(
         "/new-patients/",
-        "New Patients in Strathcona Near U of A | 109 Dental",
+        "New Patients in Edmonton Near U of A | 109 Dental",
         "New patients are welcome at 109 Dental in Queen Alexandra. Learn what to bring, CDCP and insurance notes, parking, and how to book.",
         "/new-patients/",
         body,
@@ -797,6 +775,7 @@ def reviews():
 
 
 def services_hub():
+    details = "".join(f'<li><a href="{path}">{title}</a></li>' for path, title, *_ in EXTRA_PAGES if path.startswith('/services/'))
     cards = "".join(
         f'<article class="card"><h3><a href="{href}">{label}</a></h3><p>{SERVICE_DESCRIPTIONS[label]}</p><a class="text-link" href="{href}" aria-label="Read about {esc(label)}">Read more ↗</a></article>'
         for href, label in SERVICES
@@ -806,20 +785,22 @@ def services_hub():
       <div class="container">
         {crumbs([("/", "Home"), ("/services/", "Services")])}
         <p class="kicker">Our services</p>
-        <h1>Dental services in Strathcona</h1>
+        <h1>Dental services in Edmonton</h1>
         <p class="lede">{ENTITY} Find out more about the care we offer, or call if you are unsure where to start.</p>
         <div class="cards">{cards}</div>
+        <h2>Explore a specific treatment</h2>
+        <ul class="list">{details}</ul>
         <p><a href="/blog/">Explore patient guides and other dental questions</a>, including gum care, dentures, jaw discomfort, and preparing for an appointment.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="tel:{PHONE_TEL}">Call {PHONE_DISPLAY}</a>
-          <a class="btn btn-secondary" href="/contact/#book">Book an appointment</a>
+          <a class="btn btn-secondary" href="/contact/#book">Request an appointment</a>
         </div>
       </div>
     </section>
     """
     page(
         "/services/",
-        "Dental Services in Strathcona | 109 Dental Edmonton",
+        "Dental Services in Edmonton | 109 Dental Edmonton",
         "Family dentistry, emergency care, wisdom teeth, implants, Invisalign, and more at 109 Dental in Queen Alexandra near U of A.",
         "/services/",
         body,
@@ -958,7 +939,7 @@ def wisdom():
     service_page(
         "wisdom-teeth",
         "Wisdom Teeth Removal Near U of A | 109 Dental",
-        "Wisdom teeth assessment and removal in Strathcona / near U of A. Call (780) 435-5300 or request a visit at 109 Dental.",
+        "Wisdom teeth assessment and removal in Edmonton / near U of A. Call (780) 435-5300 or request a visit at 109 Dental.",
         "Wisdom teeth care, close to campus.",
         "If a wisdom tooth is sore, swollen, or overdue for a look, 109 Dental can assess it at Suite 204, 7125 109 St NW. We explain options in plain language and book removal only when it makes sense.",
         more,
@@ -977,7 +958,7 @@ def remaining_services():
     service_page(
         "family-dentistry",
         "Family Dentistry in Queen Alexandra | 109 Dental",
-        "Family dentistry in Queen Alexandra / Strathcona near U of A. Checkups, cleanings, and restorative care for all ages.",
+        "Family dentistry in Queen Alexandra near U of A. Checkups, cleanings, and restorative care for all ages.",
         "Family dentistry in Queen Alexandra",
         f"{ENTITY} We see children and adults for checkups, fillings, and ongoing care.",
         """
@@ -996,9 +977,9 @@ def remaining_services():
     )
     service_page(
         "emergency-dentist",
-        "Emergency Dentist Strathcona / Near U of A | 109 Dental",
-        "Emergency dentist in Strathcona near U of A. Call (780) 435-5300 for toothache, broken teeth, or injuries during office hours.",
-        "Emergency dentist in Strathcona",
+        "Emergency Dentist Near U of A | 109 Dental",
+        "Emergency dentist in Edmonton near U of A. Call (780) 435-5300 for toothache, broken teeth, or injuries during office hours.",
+        "Emergency dentist in Edmonton",
         "If you have sudden tooth pain, a broken tooth, or a dental injury near Whyte Avenue or campus, call 109 Dental first. We help you decide how soon you need to be seen.",
         """
         <h2>Call us during office hours</h2>
@@ -1023,9 +1004,9 @@ def remaining_services():
     )
     service_page(
         "cosmetic-dentistry",
-        "Cosmetic Dentistry in Strathcona | 109 Dental Edmonton",
-        "Cosmetic dentistry in Strathcona near Whyte Avenue: whitening, veneers, and bonding discussed after an exam.",
-        "Cosmetic dentistry in Strathcona",
+        "Cosmetic Dentistry in Edmonton | 109 Dental Edmonton",
+        "Cosmetic dentistry in Edmonton near Whyte Avenue: whitening, veneers, and bonding discussed after an exam.",
+        "Cosmetic dentistry in Edmonton",
         "If you want a brighter or more even smile, start with an exam at our 109 Street clinic. Whitening, bonding, and veneers are options we discuss after we see your teeth.",
         """
         <h2>What we can talk through</h2>
@@ -1043,8 +1024,8 @@ def remaining_services():
     )
     service_page(
         "dental-implants",
-        "Dental Implants Near U of A | 109 Dental Strathcona",
-        "Dental implants at 109 Dental in Strathcona near U of A. A consult first, then a plan if an implant is the right replacement.",
+        "Dental Implants Near U of A | 109 Dental Edmonton",
+        "Dental implants at 109 Dental in Edmonton near U of A. A consult first, then a plan if an implant is the right replacement.",
         "Dental implants near U of A",
         "Missing a tooth and want a fixed replacement? 109 Dental can assess whether an implant is a sound option for your bone and bite.",
         """
@@ -1063,9 +1044,9 @@ def remaining_services():
     )
     service_page(
         "orthodontics-invisalign",
-        "Invisalign in Strathcona Near U of A | 109 Dental",
-        "Invisalign and orthodontic options in Strathcona near U of A. A consult first to see if clear aligners fit your bite.",
-        "Invisalign and orthodontics in Strathcona",
+        "Invisalign in Edmonton Near U of A | 109 Dental",
+        "Invisalign and orthodontic options in Edmonton near U of A. A consult first to see if clear aligners fit your bite.",
+        "Invisalign and orthodontics in Edmonton",
         "Crooked teeth or a bite that bothers you? We can talk through Invisalign and other orthodontic options at our Queen Alexandra clinic.",
         """
         <h2>Clear aligners and when they fit</h2>
@@ -1083,8 +1064,8 @@ def remaining_services():
     )
     service_page(
         "childrens-dentistry",
-        "Children's Dentistry in Strathcona | 109 Dental",
-        "Children's dentist in Strathcona / Queen Alexandra near U of A. Calm first visits, checkups, and family follow-up care.",
+        "Children's Dentistry in Edmonton | 109 Dental",
+        "Children's dentist in Queen Alexandra near U of A. Calm first visits, checkups, and family follow-up care.",
         "Children's dentistry near Whyte Ave",
         "Looking for a kids' dentist close to Strathcona and the University of Alberta? 109 Dental sees children for checkups and everyday treatment.",
         """
@@ -1103,8 +1084,8 @@ def remaining_services():
     )
     service_page(
         "root-canals",
-        "Root Canal Treatment in Strathcona | 109 Dental",
-        "Root canal treatment in Strathcona near U of A. We assess the tooth and explain whether a root canal or another option is next.",
+        "Root Canal Treatment in Edmonton | 109 Dental",
+        "Root canal treatment in Edmonton near U of A. We assess the tooth and explain whether a root canal or another option is next.",
         "Root canals in Queen Alexandra",
         "A toothache that lingers, or a tooth the dentist flagged, may need a root canal. We assess first and explain the plan before we start.",
         """
@@ -1122,9 +1103,9 @@ def remaining_services():
     )
     service_page(
         "crowns-bridges",
-        "Crowns and Bridges in Strathcona | 109 Dental",
-        "Crowns and bridges in Strathcona / Queen Alexandra. Restore a broken or missing tooth after a clear exam and estimate.",
-        "Crowns and bridges in Strathcona",
+        "Crowns and Bridges in Edmonton | 109 Dental",
+        "Crowns and bridges in Queen Alexandra. Restore a broken or missing tooth after a clear exam and estimate.",
+        "Crowns and bridges in Edmonton",
         "A cracked, heavily filled, or missing tooth may need a crown or a bridge. We explain the difference after we see the tooth and your bite.",
         """
         <h2>Crowns versus bridges</h2>
@@ -1181,6 +1162,7 @@ def legal():
         f"""
         <section class="section"><div class="container narrow">
         <h1>Thank you for getting in touch.</h1>
+        <p>Your appointment is not confirmed until the office agrees on a time with you.</p>
         <p>The office reviews messages during open hours. If you are in pain, call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a> instead of waiting on email.</p>
         <p><a href="/">Back to the homepage</a></p>
         </div></section>

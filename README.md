@@ -35,7 +35,7 @@ Production mode removes the preview banner and general noindex rule. Thank-you a
 
 Assets and navigation are base-relative. Keep GitHub's `/109-dental-site/` prefix and the root-domain behavior intact.
 
-The inline base script supports the original and review GitHub Pages projects, Hostinger, the production domain and localhost.
+Content pages use relative base paths so links and assets work without JavaScript on Hostinger, the production domain, localhost and GitHub project previews. The custom 404 uses the host root, as configured for production.
 
 Local review: http://127.0.0.1:8099/ after starting the server above.
 
@@ -61,7 +61,7 @@ The implant FAQ distinguishes CDCP exclusions from private coverage, based on He
 
 ## Launch hold
 
-The November 8 migration map accounts for all 42 current production sitemap URLs: 19 retained paths and 23 exact permanent redirects. See tools/migration.json and docs/LAUNCH.md. Clinical sign-off, booking inbox delivery, account-level checks, and approved production deployment remain launch gates.
+The November 10 migration map accounts for all 42 current production sitemap URLs: 29 retained paths and 13 exact permanent redirects. See tools/migration.json and docs/LAUNCH.md. Clinical sign-off, booking inbox delivery, account-level checks, and approved production deployment remain launch gates.
 
 Verify production robots.txt directly. The Hostinger temporary hostname served a Googlebot block that differed from the repository file during the audit. Preview noindex must not accidentally remain on production, and robots must allow crawlers to read noindex on review hosts.
 
