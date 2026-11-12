@@ -1,5 +1,5 @@
 {
-  "mode": "preview",
+  "mode": "production",
   "pages": [
     "/",
     "/about/",

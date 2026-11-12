@@ -1,4 +1,7 @@
 RewriteEngine On
+# Canonical host, only for the approved production domain.
+RewriteCond %{HTTP_HOST} ^www\.109dental\.ca$ [NC]
+RewriteRule ^ https://109dental.ca%{REQUEST_URI} [R=301,L]
 
 # Preserve old website URLs. Exact matches only; no homepage catch-all.
 RewriteRule ^services/disclusion\-time\-reduction\-therapy/?$ /services/tmj-tmd-therapy/ [R=301,L,NE]
