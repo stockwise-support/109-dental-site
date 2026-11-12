@@ -1,6 +1,6 @@
 # 109 Dental website
 
-Plain HTML, CSS and JavaScript for 109 Dental in Edmonton. The Python generator is the source of truth for shared templates and page copy. This branch is a review build for Sandra, not an approved production launch.
+Plain HTML, CSS and JavaScript for 109 Dental in Edmonton. The Python generator is the source of truth for shared templates and page copy. AJ approved production launch on November 12. The committed build is production; domain propagation and HTTPS issuance were still pending at the last check.
 
 ## Build and check
 
@@ -65,7 +65,7 @@ The November 10 migration map accounts for all 42 current production sitemap URL
 
 Verify production robots.txt directly. The Hostinger temporary hostname served a Googlebot block that differed from the repository file during the audit. Preview noindex must not accidentally remain on production, and robots must allow crawlers to read noindex on review hosts.
 
-AJ must approve a merge and DNS cutover separately. No email or message to the clinic is sent automatically.
+AJ authorized the DNS cutover on November 12; see docs/LAUNCH.md for the applied changes and remaining live checks. Do not submit additional test enquiries without authorization.
 
 ## Identity and assets
 
