@@ -2,11 +2,11 @@
 
 Updated November 10, 2026. Main domain and DNS have not been changed.
 
-## Hosting blocker found during verification
+## Current preview status
 
-The review update was pushed to the existing Hostinger deployment branch, but the temporary hostname could not be verified: page and redirect requests returned connection resets, while the stylesheet URL returned an HTML page titled "Parked Domain name on Hostinger DNS system". A 200 response alone is not proof of a working deployment. Robots.txt still responds with the Hostinger Googlebot block. Similar page-fetch failures occurred during research before this deployment.
+Verified November 12: the working preview is https://blueviolet-rhinoceros-423405.hostingersite.com/. The earlier palevioletred-ant hostname is obsolete for this site. Hostinger is connected to cursor/booking-form-gmail-2808; the previously assumed fix-gh-pages branch was not the connected branch. DNS remains unchanged.
 
-The Hostinger website/domain assignment and Git deployment connection need to be checked in the hosting account before launch. Do not describe the new preview as live until the deployment check and visual checks pass. Local preview browser navigation also timed out in this session, so a fresh desktop/mobile visual review of these additions remains open. Automated HTML, asset-reference, FAQ, form-configuration, migration, and production-build checks passed locally.
+Correct preview: https://blueviolet-rhinoceros-423405.hostingersite.com/. The new PHP form is ready there. One synthetic enquiry was submitted through the contact page and the server returned: “Your enquiry has been accepted for email delivery to our team. Sending this form does not confirm an appointment. Our team will follow up with you.” This verifies native PHP mail acceptance, not Gmail receipt. No second delivery test was sent. Mobile layouts were inspected at 390px and checked at 320px with no horizontal overflow. Form fields use 16px text and at least 48px heights. Server security and validation tests passed without sending mail.
 
 ## Ready in this branch
 

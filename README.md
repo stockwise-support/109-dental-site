@@ -44,9 +44,9 @@ A separate 109-dental-review GitHub Pages project is supported by the base-path 
 Preview locations:
 
 - https://stockwise-support.github.io/109-dental-site/
-- https://palevioletred-ant-543523.hostingersite.com/
+- https://blueviolet-rhinoceros-423405.hostingersite.com/
 
-GitHub Pages builds main and still shows the older build. Hostinger auto-deploys cursor/fix-gh-pages-css-3e09, verified during review updates. Do not force-push or change DNS to publish a review.
+GitHub Pages builds main and still shows the older build. Hostinger auto-deploys cursor/booking-form-gmail-2808, confirmed in its deployment dashboard. Do not force-push or change DNS to publish a review.
 
 ## Clinic facts awaiting confirmation
 
@@ -54,7 +54,7 @@ GitHub Pages builds main and still shows the older build. Hostinger auto-deploys
 - Direct billing and new-patient availability. Existing pages already say CDCP is accepted; that copy was left unchanged.
 - Steve/Steven Barkwell spelling, both dentists' bios, offered services and emergency arrangements.
 - Parking/building-access instructions and official social accounts.
-- FormSubmit activation for 109dentaloffice@gmail.com. The inbox must open FormSubmit's one-time confirmation before requests are delivered. Do not send a test submission to trigger that email. Staff response ownership is still open.
+- PHP enquiry delivery to 109dentaloffice@gmail.com was accepted by Hostinger on November 12. One authorized synthetic enquiry was sent; inbox receipt and staff response ownership still need confirmation. FormSubmit is no longer used.
 - Any patient quote needs the appropriate approval and consent. The review page only links to the clinic's Google listing.
 
 The implant FAQ distinguishes CDCP exclusions from private coverage, based on Health Canada's CDCP Dental Benefits Guide: https://www.canada.ca/en/services/benefits/dental/dental-care-plan/guide.html
@@ -78,4 +78,4 @@ Use the existing clinic images in assets/photos and original logo in assets/bran
 
 See [launch handoff](docs/LAUNCH.md) for production packaging, validation, migration decisions, and remaining checks. `tools/launch_content.py` holds the supplemental patient copy and primary references. `tools/prepare_release.py` builds and validates an isolated production ZIP without changing the review files.
 
-November 8 hosting verification is blocked: the temporary hostname returns connection errors and a parked-domain HTML response at its stylesheet URL. Code is pushed, but the latest preview deployment has not been verified. Check the Hostinger website/domain assignment and Git connection before cutover.
+November 12: the current blueviolet-rhinoceros preview serves the latest website and PHP form. The previous palevioletred-ant address was obsolete. DNS remains unchanged. Hostinger rewrites canonical links on the temporary preview; production canonicals must be checked again after launch. See docs/LAUNCH.md for mail and privacy follow-up.

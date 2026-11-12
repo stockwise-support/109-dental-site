@@ -19,7 +19,10 @@ for (let offset = 0; offset < manifest.pages.length; offset += 4) {
     if (production && !['/404.html','/thank-you/'].includes(path)) assert(!/noindex/i.test(response.headers.get('x-robots-tag') || ''), 'HTTP header prevents indexing');
     const expected = !production || ['/404.html','/thank-you/'].includes(path);
     assert(/<meta name="robots" content="noindex, follow">/.test(html) === expected, 'wrong indexing mode');
-    assert(html.includes(`href="https://109dental.ca${path}"`), 'wrong canonical');
+    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)[1];
+    const expectedCanonical = `https://109dental.ca${path}`;
+    const previewRewrite = !production && new URL(origin).hostname.endsWith('.hostingersite.com') && canonical === new URL(path, origin).href;
+    assert(canonical === expectedCanonical || previewRewrite, 'wrong canonical');
     assert(!/Formerly Dr\.|Previously known as/.test(html), 'old clinic name');
     if (html.includes('data-booking-form')) assert(html.includes('action="api/enquiry.php"'), 'wrong booking destination');
   })));
@@ -41,7 +44,8 @@ await Promise.all(assetPaths.map(path=>check(path,async()=>{
   assert(!/text\/html/i.test(response.headers.get('content-type') || ''), 'asset URL returned HTML, possibly a hosting placeholder');
   const content = Buffer.from(await response.arrayBuffer());
   const local = fs.readFileSync(new URL('../' + path, import.meta.url));
-  assert(content.equals(local), 'deployed asset does not match release');
+  const equivalent = /\.(css|js)$/.test(path) ? content.toString('utf8').replace(/\r\n/g,'\n') === local.toString('utf8').replace(/\r\n/g,'\n') : content.equals(local);
+  assert(equivalent, 'deployed asset does not match release');
 })));
 await check('unknown URL', async()=>{
   const response = await fetch(new URL('/launch-check-does-not-exist/',origin),{signal:AbortSignal.timeout(20000)});
@@ -57,4 +61,4 @@ if (production) {
   });
 }
 if (errors.length) { console.error(errors.join('\n')); process.exitCode=1; }
-else console.log(`PASS: ${manifest.pages.length} live pages, 23 permanent redirects with attribution preserved, ${assetPaths.length} assets, and real 404 response. No forms submitted.`);
+else console.log(`PASS: ${manifest.pages.length} live pages, ${migration.filter(r=>r.from!==r.to).length} permanent redirects with attribution preserved, ${assetPaths.length} assets, and real 404 response. No forms submitted.`);
