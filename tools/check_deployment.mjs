@@ -21,7 +21,7 @@ for (let offset = 0; offset < manifest.pages.length; offset += 4) {
     assert(/<meta name="robots" content="noindex, follow">/.test(html) === expected, 'wrong indexing mode');
     assert(html.includes(`href="https://109dental.ca${path}"`), 'wrong canonical');
     assert(!/Formerly Dr\.|Previously known as/.test(html), 'old clinic name');
-    if (html.includes('data-booking-form')) assert(html.includes('action="https://formsubmit.co/109dentaloffice@gmail.com"'), 'wrong booking destination');
+    if (html.includes('data-booking-form')) assert(html.includes('action="api/enquiry.php"'), 'wrong booking destination');
   })));
 }
 for (const row of migration.filter(r => r.from !== r.to)) {

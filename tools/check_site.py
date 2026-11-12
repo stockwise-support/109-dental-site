@@ -15,22 +15,9 @@ args = parser.parse_args()
 ROOT = args.root.resolve()
 PUBLIC_EMAIL = "dental_appointment@shaw.ca"
 BOOKING_EMAIL = "109dentaloffice@gmail.com"
-FORM_ACTION = f"https://formsubmit.co/{BOOKING_EMAIL}"
+FORM_ACTION = "api/enquiry.php"
 OLD_FORM_ACTION = f"https://formsubmit.co/{PUBLIC_EMAIL}"
-BOOKING_FIELDS = {
-    "_subject": "109 Dental appointment request",
-    "_template": "table",
-    "_captcha": "false",
-    "_next": "https://109dental.ca/thank-you/",
-    "page": "",
-    "_honey": None,
-    "name": None,
-    "phone": None,
-    "email": None,
-    "preferred_time": None,
-    "reason": None,
-    "notes": None,
-}
+BOOKING_FIELDS = {"csrf":"", "request_id":"", "website":None, "name":None, "phone":None, "email":None, "reason":None, "comments":None}
 
 
 class Page(HTMLParser):
@@ -158,7 +145,7 @@ for path, page in pages.items():
         for extra in ("_cc", "_autoresponse", "_webhook", "_replyto"):
             assert extra not in form["fields"], f"Unexpected mail field {extra}: {path}"
     html_lower = html.lower()
-    assert f"mailto:{BOOKING_EMAIL}" not in html_lower, f"Public mailto switched to booking inbox: {path}"
+    assert "formsubmit.co" not in html_lower, f"Old form endpoint remains: {path}"
 
 contact_html = (ROOT / "contact/index.html").read_text(encoding="utf-8")
 assert '<div>Friday</div><div>9:00 AM to 3:00 PM</div>' in contact_html
@@ -166,7 +153,7 @@ assert "Friday 9:00 AM to 3:00 PM" in contact_html
 assert f"mailto:{PUBLIC_EMAIL}" in contact_html
 assert f'<p>Email: <a href="mailto:{PUBLIC_EMAIL}">{PUBLIC_EMAIL}</a></p>' in contact_html
 privacy_html = (ROOT / "privacy/index.html").read_text(encoding="utf-8")
-assert f"Appointment forms go to {BOOKING_EMAIL} through FormSubmit." in privacy_html
+assert f"sent by email to {BOOKING_EMAIL}" in privacy_html
 home_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "Yes. 109 Dental accepts the Canadian Dental Care Plan." in home_html
 new_patients_html = (ROOT / "new-patients/index.html").read_text(encoding="utf-8")

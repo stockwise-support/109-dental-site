@@ -51,25 +51,69 @@
     });
   });
 
-  function siteBase() {
-    var base = document.querySelector("base[href]");
-    if (base && base.href) {
-      return base.href.endsWith("/") ? base.href : base.href + "/";
-    }
-    return window.location.origin + "/";
-  }
-
   if (form) {
-    var nextField = form.querySelector("[name='_next']");
-    if (nextField) {
-      nextField.value = siteBase() + "thank-you/";
+    var button = form.querySelector("button[type='submit']");
+    var status = form.querySelector("[data-form-status]");
+    var busy = false;
+    var ready = false;
+    var finished = false;
+    var endpoint = new URL(form.getAttribute("action"), document.baseURI);
+    function report(message, error) {
+      status.textContent = message;
+      status.classList.toggle("form-error", !!error);
     }
-
-    var pageField = form.querySelector("[name='page']");
-    if (pageField) {
-      pageField.value = window.location.origin + window.location.pathname;
+    async function request(options) {
+      var controller = new AbortController();
+      var timeout = setTimeout(function () { controller.abort(); }, 20000);
+      try {
+        var response = await fetch(endpoint, Object.assign({credentials:"same-origin",cache:"no-store",headers:{"X-Enquiry-Request":"1"},signal:controller.signal}, options));
+        var data = await response.json();
+        return {response:response,data:data};
+      } finally { clearTimeout(timeout); }
     }
-
-
+    async function prepare() {
+      try {
+        if (window.location.protocol !== "https:" || endpoint.origin !== window.location.origin) throw new Error();
+        var result = await request({method:"GET"});
+        if (!result.response.ok || !result.data.csrf || !result.data.request_id) throw new Error();
+        form.elements.csrf.value = result.data.csrf;
+        form.elements.request_id.value = result.data.request_id;
+        ready = true;
+        button.disabled = false;
+        report("", false);
+      } catch (_) {
+        report("The secure form is unavailable. Please call or email us using the details below.", true);
+      }
+    }
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      if (busy || finished || !ready || !form.reportValidity()) return;
+      busy = true;
+      button.disabled = true;
+      button.textContent = "Sending…";
+      form.setAttribute("aria-busy", "true");
+      report("Sending your enquiry…", false);
+      try {
+        var result = await request({method:"POST",body:new URLSearchParams(new FormData(form))});
+        if (!result.response.ok) {
+          report((result.data.error || "We could not send your enquiry.") + " You can call or email us using the details below.", true);
+          // Validation errors can be corrected. Delivery failures and ambiguous outcomes require office contact.
+          finished = result.response.status !== 422;
+        } else {
+          finished = true;
+          report(result.data.message, false);
+          form.reset();
+        }
+      } catch (_) {
+        finished = true;
+        report("We could not confirm whether your enquiry was accepted. Please call or email us rather than submitting again.", true);
+      } finally {
+        busy = false;
+        form.removeAttribute("aria-busy");
+        button.disabled = finished;
+        button.textContent = finished ? "Enquiry finished" : "Send enquiry";
+      }
+    });
+    prepare();
   }
 })();

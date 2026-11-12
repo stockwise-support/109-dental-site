@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=c4aa6f61083b">
+  <link rel="stylesheet" href="css/styles.css?v=c2e581b85a52">
   
   <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -181,35 +181,34 @@
             
 </div></div></div></section>
     <section class="section section-alt" id="book"><div class="container two-col booking-section"><div><p class="kicker">We'll see you soon</p><h2>Make time<br>for your teeth.</h2><p>Request a visit below or call the clinic. We will be in touch to confirm your appointment.</p><a class="phone-link" href="tel:+17804355300">(780) 435-5300</a><figure class="photo"><img src="assets/photos/waiting-room.webp" alt="The waiting area at 109 Dental" width="1100" height="1650" loading="lazy"  decoding="async"></figure></div>
-<form class="form-card" data-booking-form action="https://formsubmit.co/109dentaloffice@gmail.com" method="POST">
-  <h2>Request a visit</h2>
-  <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:+17804355300">(780) 435-5300</a>.</p>
-  <input type="hidden" name="_subject" value="109 Dental appointment request">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_next" value="https://109dental.ca/thank-you/">
-  <input type="hidden" name="page" value="">
-  <div class="hp" aria-hidden="true"><label for="website">Website</label>
-  <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
-  <label for="name">Name</label>
-  <input id="name" name="name" type="text" required autocomplete="name">
-  <label for="phone">Phone</label>
-  <input id="phone" name="phone" type="tel" required autocomplete="tel">
-  <label for="email">Email</label>
-  <input id="email" name="email" type="email" required autocomplete="email">
-  <label for="preferred_time">Preferred time</label>
-  <input id="preferred_time" name="preferred_time" type="text" placeholder="Morning, afternoon, or a day that works">
-  <label for="reason">Reason for visit</label>
+<form class="form-card" data-booking-form action="api/enquiry.php" method="POST">
+  <h2>How can we help?</h2>
+  <p class="form-note">Leave a few details and our team will get in touch.</p>
+  <input type="hidden" name="csrf" value="">
+  <input type="hidden" name="request_id" value="">
+  <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+  <label for="name">Your name <span>(required)</span></label>
+  <input id="name" name="name" type="text" maxlength="120" required autocomplete="name">
+  <label for="phone">Phone number <span>(required)</span></label>
+  <input id="phone" name="phone" type="tel" inputmode="tel" maxlength="40" required autocomplete="tel">
+  <label for="email">Email address <span>(required)</span></label>
+  <input id="email" name="email" type="email" inputmode="email" maxlength="254" required autocomplete="email">
+  <label for="reason">What can we help you with? <span>(required)</span></label>
   <select id="reason" name="reason" required>
-    <option value="new-patient" selected>New patient visit</option>
-<option value="wisdom">Wisdom teeth</option>
-<option value="emergency">Dental emergency</option>
-<option value="other">Other / general care</option>
+    <option value="">Please choose</option>
+    <option value="appointment">Request an appointment</option>
+    <option value="change">Change an appointment</option>
+    <option value="call">Please call me</option>
+    <option value="office">General office question</option>
   </select>
-  <label for="notes">Notes (optional)</label>
-  <textarea id="notes" name="notes"></textarea>
-  <p class="form-note">Please keep notes to scheduling details. Do not include medical records or health card numbers. Requests are sent through FormSubmit. <a href="privacy/">Privacy information</a></p>
-  <button class="btn btn-primary" type="submit">Send request</button>
+  <label for="comments">Comments <span>(optional)</span></label>
+  <textarea id="comments" name="comments" maxlength="2000" aria-describedby="comments-help"></textarea>
+  <p class="form-note" id="comments-help">Please don’t include medical, dental, insurance or other sensitive details.</p>
+  <button class="btn btn-primary" type="submit" disabled>Send enquiry</button>
+  <p data-form-status role="status" aria-live="polite" aria-atomic="true">Preparing secure form…</p>
+  <noscript><p>Please enable JavaScript to use the secure form, or contact us by phone or email below.</p></noscript>
+  <p class="form-note">For urgent concerns, please call <a href="tel:+17804355300">(780) 435-5300</a>. Sending this form does not confirm an appointment. Our team will follow up with you.</p>
+  <p class="form-note">If you cannot send the form, call <a href="tel:+17804355300">(780) 435-5300</a> or email <a href="mailto:109dentaloffice@gmail.com">109dentaloffice@gmail.com</a>. Please keep emails to general office enquiries. <a href="privacy/">Privacy information</a></p>
 </form>
 </div></section>
     
@@ -266,6 +265,6 @@
   <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
-  <script src="js/main.js?v=ab9144eb0938" defer></script>
+  <script src="js/main.js?v=d9d65dd9e906" defer></script>
 </body>
 </html>

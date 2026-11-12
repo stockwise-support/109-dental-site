@@ -1335,3 +1335,7 @@ main>.section:first-child {
     transform:none
   }
 }
+
+.form-card [data-form-status] { overflow-wrap:anywhere; font-size:16px; }
+.form-card .form-error { color:#8b2424; }
+.form-card button:disabled { opacity:.65; cursor:default; transform:none; }

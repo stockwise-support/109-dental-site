@@ -178,43 +178,35 @@ def sticky_bar() -> str:
 
 
 def booking_form(default_reason: str = "other", heading: str = "Request an appointment") -> str:
-    reasons = [
-        ("new-patient", "New patient visit"),
-        ("wisdom", "Wisdom teeth"),
-        ("emergency", "Dental emergency"),
-        ("other", "Other / general care"),
-    ]
-    options = "\n".join(
-        f'<option value="{value}"{" selected" if value == default_reason else ""}>{label}</option>'
-        for value, label in reasons
-    )
     return f"""
-<form class="form-card" data-booking-form action="https://formsubmit.co/{BOOKING_EMAIL}" method="POST">
-  <h2>{heading}</h2>
-  <p class="form-note">Tell us when you would like to come in. We will contact you during office hours to confirm a time. For pain or swelling, call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>.</p>
-  <input type="hidden" name="_subject" value="109 Dental appointment request">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_captcha" value="false">
-  <input type="hidden" name="_next" value="{CANON}/thank-you/">
-  <input type="hidden" name="page" value="">
-  <div class="hp" aria-hidden="true"><label for="website">Website</label>
-  <input id="website" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
-  <label for="name">Name</label>
-  <input id="name" name="name" type="text" required autocomplete="name">
-  <label for="phone">Phone</label>
-  <input id="phone" name="phone" type="tel" required autocomplete="tel">
-  <label for="email">Email</label>
-  <input id="email" name="email" type="email" required autocomplete="email">
-  <label for="preferred_time">Preferred time</label>
-  <input id="preferred_time" name="preferred_time" type="text" placeholder="Morning, afternoon, or a day that works">
-  <label for="reason">Reason for visit</label>
+<form class="form-card" data-booking-form action="{u('/api/enquiry.php')}" method="POST">
+  <h2>How can we help?</h2>
+  <p class="form-note">Leave a few details and our team will get in touch.</p>
+  <input type="hidden" name="csrf" value="">
+  <input type="hidden" name="request_id" value="">
+  <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+  <label for="name">Your name <span>(required)</span></label>
+  <input id="name" name="name" type="text" maxlength="120" required autocomplete="name">
+  <label for="phone">Phone number <span>(required)</span></label>
+  <input id="phone" name="phone" type="tel" inputmode="tel" maxlength="40" required autocomplete="tel">
+  <label for="email">Email address <span>(required)</span></label>
+  <input id="email" name="email" type="email" inputmode="email" maxlength="254" required autocomplete="email">
+  <label for="reason">What can we help you with? <span>(required)</span></label>
   <select id="reason" name="reason" required>
-    {options}
+    <option value="">Please choose</option>
+    <option value="appointment">Request an appointment</option>
+    <option value="change">Change an appointment</option>
+    <option value="call">Please call me</option>
+    <option value="office">General office question</option>
   </select>
-  <label for="notes">Notes (optional)</label>
-  <textarea id="notes" name="notes"></textarea>
-  <p class="form-note">Please keep notes to scheduling details. Do not include medical records or health card numbers. Requests are sent through FormSubmit. <a href="/privacy/">Privacy information</a></p>
-  <button class="btn btn-primary" type="submit">Send request</button>
+  <label for="comments">Comments <span>(optional)</span></label>
+  <textarea id="comments" name="comments" maxlength="2000" aria-describedby="comments-help"></textarea>
+  <p class="form-note" id="comments-help">Please don’t include medical, dental, insurance or other sensitive details.</p>
+  <button class="btn btn-primary" type="submit" disabled>Send enquiry</button>
+  <p data-form-status role="status" aria-live="polite" aria-atomic="true">Preparing secure form…</p>
+  <noscript><p>Please enable JavaScript to use the secure form, or contact us by phone or email below.</p></noscript>
+  <p class="form-note">For urgent concerns, please call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a>. Sending this form does not confirm an appointment. Our team will follow up with you.</p>
+  <p class="form-note">If you cannot send the form, call <a href="tel:{PHONE_TEL}">{PHONE_DISPLAY}</a> or email <a href="mailto:{BOOKING_EMAIL}">{BOOKING_EMAIL}</a>. Please keep emails to general office enquiries. <a href="{u('/privacy/')}">Privacy information</a></p>
 </form>
 """
 
@@ -1132,9 +1124,11 @@ def legal():
         <section class="section"><div class="container narrow">
         {crumbs([("/", "Home"), ("/privacy/", "Privacy")])}
         <h1>Privacy</h1>
-        <p>Appointment forms go to {BOOKING_EMAIL} through FormSubmit. Use the form for scheduling, not for detailed health records.</p>
-        <p>Do not send personal health numbers or full medical histories through the website. Bring those to the clinic or call {PHONE_DISPLAY}.</p>
-        <p>The website host and form processor may keep technical logs. Please call the clinic if you have questions about an appointment request.</p>
+        <p>We collect your name, phone number, email address, enquiry type and optional comments so the office can respond to your request. Please do not include medical, dental, insurance or other sensitive details.</p>
+        <p>Enquiries are processed on our Hostinger website server and sent by email to {BOOKING_EMAIL}. Your email address is used as the reply-to address. FormSubmit is no longer used by this form. Sending an enquiry does not confirm an appointment.</p>
+        <p>The form uses a secure session cookie to prevent forged requests. For spam and duplicate protection, the server keeps keyed hashes, timestamps and delivery outcomes for up to 24 hours of active use; expired records are removed when the next enquiry is processed. These records do not contain the enquiry text or raw contact details. The form does not put enquiry content into URLs, analytics or application logs.</p>
+        <p>Hostinger and the email provider process the request and email. Hosting access logs may contain technical information such as IP addresses. Email copies may remain in the clinic inbox, provider systems and backups according to their retention settings. Email delivery is not a guarantee of confidentiality or receipt.</p>
+        <p>For questions about access to or correction of information you submitted, or the clinic’s retention practices, call {PHONE_DISPLAY}. Use the phone for sensitive or urgent matters.</p>
         </div></section>
         """,
         [breadcrumb_schema([("/", "Home"), ("/privacy/", "Privacy")])],
@@ -1307,7 +1301,7 @@ if __name__ == "__main__":
         import shutil
         ROOT = args.output_dir.resolve()
         ROOT.mkdir(parents=True, exist_ok=True)
-        for folder in ('assets', 'css', 'js'):
+        for folder in ('assets', 'css', 'js', 'api'):
             shutil.copytree(SOURCE_ROOT / folder, ROOT / folder, dirs_exist_ok=True)
     PREVIEW = not args.production
     home()

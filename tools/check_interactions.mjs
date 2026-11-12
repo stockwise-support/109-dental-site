@@ -12,12 +12,10 @@ const toggle = {addEventListener:(key,fn)=>toggleEvents[key]=fn,setAttribute(){}
 const fields = {"[name='_next']":{},"[name='page']":{}};
 const body={classList:classes()};
 const document={body,querySelectorAll:()=>[],addEventListener:(key,fn)=>events[key]=fn,querySelector(selector){
-  return {'[data-nav]':nav,'[data-nav-toggle]':toggle,'[data-booking-form]':{querySelector:s=>fields[s]},'base[href]':{href:'https://109dental.ca/'}}[selector];
+  return {'[data-nav]':nav,'[data-nav-toggle]':toggle,'[data-booking-form]':null,'base[href]':{href:'https://109dental.ca/'}}[selector];
 }};
 vm.runInNewContext(script,{document,window:{location:new URL('https://109dental.ca/contact/?utm_term=private&reason=private#private')},Date});
-assert.equal(fields["[name='page']"].value,'https://109dental.ca/contact/');
-assert.equal(fields["[name='_next']"].value,'https://109dental.ca/thank-you/');
 toggleEvents.click(); assert(body.classList.contains('nav-open'));
 events.keydown({key:'Escape'}); assert(!body.classList.contains('nav-open')); assert(!nav.classList.contains('is-open'));
 toggleEvents.click(); events.click({target:{}}); assert(!body.classList.contains('nav-open'));
-console.log('PASS: Escape and outside-click restore scrolling; form page field excludes query and fragment.');
+console.log('PASS: Escape and outside-click restore scrolling; menu closes correctly.');
