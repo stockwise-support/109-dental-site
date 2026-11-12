@@ -2,49 +2,34 @@
 <html lang="en-CA">
 <head>
   <meta charset="utf-8">
-  <base href="https://stockwise-support.github.io/109-dental-site/" data-gh-pages-base>
-  <script>
-    (function () {
-      var base = document.querySelector("base[data-gh-pages-base]");
-      if (!base) return;
-      var host = location.hostname;
-      var path = location.pathname || "/";
-      if (host === "localhost" || host === "127.0.0.1") {
-        base.href = location.origin + "/";
-        return;
-      }
-      if (host.indexOf("github.io") !== -1 && path.indexOf("/109-dental-site/") === 0) {
-        base.href = location.origin + "/109-dental-site/";
-        return;
-      }
-      base.href = location.origin + "/";
-    })();
-  </script>
+  <base href="../">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy | 109 Dental Edmonton</title>
   <meta name="description" content="How 109 Dental handles appointment requests and contact details sent through this website.">
+  
   <link rel="canonical" href="https://109dental.ca/privacy/">
   <meta property="og:title" content="Privacy Policy | 109 Dental Edmonton">
   <meta property="og:description" content="How 109 Dental handles appointment requests and contact details sent through this website.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://109dental.ca/privacy/">
   <meta property="og:locale" content="en_CA">
+  <meta property="og:image" content="https://109dental.ca/assets/photos/exterior.webp">
   <meta name="theme-color" content="#1a5c63">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20260922b">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=c2e581b85a52">
   
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://109dental.ca/"}, {"@type": "ListItem", "position": 2, "name": "Privacy", "item": "https://109dental.ca/privacy/"}]}</script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="preview-banner">Preview for Sandra and StockWise. Feedback welcome before we switch 109dental.ca over.</div>
+  <a class="skip-link" href="privacy/#main">Skip to content</a>
+  
   <header class="site-header">
     <div class="topbar">
       <div class="container topbar-inner">
-        <span>Queen Alexandra / Strathcona · near U of A</span>
+        <span>Suite 204, 7125 109 St NW · Edmonton</span>
         <a href="tel:+17804355300">(780) 435-5300</a>
       </div>
     </div>
@@ -53,7 +38,6 @@
       
     <nav class="nav" id="site-nav" data-nav aria-label="Primary">
       <ul class="nav-list">
-        <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li class="has-sub">
           <a href="services/">Services</a>
@@ -71,14 +55,12 @@
           </div>
         </li>
         <li><a href="new-patients/">New Patients</a></li>
-        <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
       </ul>
     </nav>
     
       <div class="header-cta">
-        <a class="btn btn-secondary" href="tel:+17804355300">Call (780) 435-5300</a>
-        <a class="btn btn-primary" href="contact/#book">Book</a>
+        <a class="btn btn-primary" href="contact/#book">Request a visit <span aria-hidden="true">↗</span></a>
         <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">Menu</button>
       </div>
     </div>
@@ -88,9 +70,11 @@
         <section class="section"><div class="container narrow">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="./">Home</a> / <span>Privacy</span></nav>
         <h1>Privacy</h1>
-        <p>Appointment forms go to dental_appointment@shaw.ca through FormSubmit. Use the form for scheduling, not for detailed health records.</p>
-        <p>Do not send personal health numbers or full medical histories through the website. Bring those to the clinic or call (780) 435-5300.</p>
-        <p>This preview site may be hosted on a temporary domain before DNS points to 109dental.ca. Hosting and form processors keep their own logs.</p>
+        <p>We collect your name, phone number, email address, enquiry type and optional comments so the office can respond to your request. Please do not include medical, dental, insurance or other sensitive details.</p>
+        <p>Enquiries are processed on our Hostinger website server and sent by email to 109dentaloffice@gmail.com. Your email address is used as the reply-to address. FormSubmit is no longer used by this form. Sending an enquiry does not confirm an appointment.</p>
+        <p>The form uses a secure session cookie to prevent forged requests. For spam and duplicate protection, the server keeps keyed hashes, timestamps and delivery outcomes for up to 24 hours of active use; expired records are removed when the next enquiry is processed. These records do not contain the enquiry text or raw contact details. The form does not put enquiry content into URLs, analytics or application logs.</p>
+        <p>Hostinger and the email provider process the request and email. Hosting access logs may contain technical information such as IP addresses. Email copies may remain in the clinic inbox, provider systems and backups according to their retention settings. Email delivery is not a guarantee of confidentiality or receipt.</p>
+        <p>For questions about access to or correction of information you submitted, or the clinic’s retention practices, call (780) 435-5300. Use the phone for sensitive or urgent matters.</p>
         </div></section>
         
   </main>
@@ -98,7 +82,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <div class="footer-title">109 Dental</div>
+      <div class="footer-wordmark">109 Dental<span>On 109 Street. Here for you.</span></div>
       <address class="nap">
         <p>109 Dental</p>
         <p>Suite 204, 7125 109 St NW<br>Edmonton, AB T6G 1B9</p>
@@ -114,6 +98,8 @@
         <li><a href="./">Home</a></li>
         <li><a href="about/">About</a></li>
         <li><a href="new-patients/">New patients</a></li>
+        <li><a href="cdcp-insurance/">CDCP &amp; insurance</a></li>
+        <li><a href="blog/">Patient guides</a></li>
         <li><a href="reviews/">Reviews</a></li>
         <li><a href="contact/">Contact</a></li>
         <li><a href="privacy/">Privacy</a></li>
@@ -135,14 +121,15 @@
       </ul>
     </div>
   </div>
+  <div class="container footer-bottom"><span>© <span data-year>2026</span> 109 Dental</span><span>Queen Alexandra · Edmonton</span></div>
 </footer>
 
   
 <div class="sticky-bar" aria-label="Mobile contact actions">
-  <a class="btn btn-primary" href="tel:+17804355300">Call (780) 435-5300</a>
-  <a class="btn btn-copper" href="contact/#book">Book</a>
+  <a class="btn btn-secondary" href="tel:+17804355300">Call the clinic</a>
+  <a class="btn btn-primary" href="contact/#book">Request a visit</a>
 </div>
 
-  <script src="js/main.js" defer></script>
+  <script src="js/main.js?v=d9d65dd9e906" defer></script>
 </body>
 </html>

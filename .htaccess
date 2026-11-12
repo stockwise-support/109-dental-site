@@ -1,4 +1,22 @@
 RewriteEngine On
+# Canonical host, only for the approved production domain.
+RewriteCond %{HTTP_HOST} ^www\.109dental\.ca$ [NC]
+RewriteRule ^ https://109dental.ca%{REQUEST_URI} [R=301,L]
+
+# Preserve old website URLs. Exact matches only; no homepage catch-all.
+RewriteRule ^services/disclusion\-time\-reduction\-therapy/?$ /services/tmj-tmd-therapy/ [R=301,L,NE]
+RewriteRule ^services/myobrace/?$ /services/jaw-development-therapy/ [R=301,L,NE]
+RewriteRule ^services/laser\-gum\-contouring/?$ /services/gum-lift-procedure/ [R=301,L,NE]
+RewriteRule ^services/neuromuscular\-tmj\-therapy/?$ /services/tmj-tmd-therapy/ [R=301,L,NE]
+RewriteRule ^services/vivos/?$ /services/sleep-dentistry/ [R=301,L,NE]
+RewriteRule ^services/family\-dentist/?$ /services/family-dentistry/ [R=301,L,NE]
+RewriteRule ^services/dental\-bonding/?$ /services/dental-fillings-and-bonding/ [R=301,L,NE]
+RewriteRule ^services/root\-canal\-treatment/?$ /services/root-canals/ [R=301,L,NE]
+RewriteRule ^services/invisalign/?$ /services/orthodontics-invisalign/ [R=301,L,NE]
+RewriteRule ^contact\-us/?$ /contact/ [R=301,L,NE]
+RewriteRule ^about\-us/?$ /about/ [R=301,L,NE]
+RewriteRule ^cdcp\-eligibility\-co\-pay\-calculator\-109\-dental\-edmonton/?$ /cdcp-insurance/ [R=301,L,NE]
+RewriteRule ^services/emergency\-dental/?$ /services/emergency-dentist/ [R=301,L,NE]
 RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -15,6 +33,9 @@ ErrorDocument 404 /404.html
 </IfModule>
 
 <IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
   Header set X-Frame-Options "SAMEORIGIN"
